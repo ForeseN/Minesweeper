@@ -29,6 +29,8 @@ function initGame() {
     gBoard = buildBoard()
     renderBoard(gBoard, '.board-container')
     console.log(gBoard)
+    setMinesNegsCount(gBoard)
+    renderBoard(gBoard, '.board-container')
 }
 
 function buildBoard() {
@@ -60,4 +62,14 @@ function buildBoard() {
         isMarked: false
     }
     return board
+}
+
+function getCellValue(cell) {
+    let value = ""
+    if (cell.isShown) {
+        if (cell.isMine) value = MINE
+        else if (cell.minesAroundCount === 0) value = ""
+        else value = cell.minesAroundCount
+    }
+    return value
 }

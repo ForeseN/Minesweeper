@@ -9,16 +9,10 @@ function renderBoard(mat, selector) {
         for (var j = 0; j < mat[0].length; j++) {
 
             const cell = mat[i][j]
-            console.log(mat[i][j])
             const type = cell.isMine ? "Mine" : ""
             const condition = cell.isShown ? "opened" : "unopened"
             const className = `cell cell-${i}-${j} ${type} ${condition}`
-            let value = ""
-            if (cell.isShown) {
-                if (cell.isMine) value = MINE
-                else if (cell.minesAroundCount === 0) value = ""
-                else value = cell.minesAroundCount
-            }
+            let value = getCellValue(cell)
 
             strHTML += `<td class="${className}">${value}</td>`
         }
@@ -66,3 +60,4 @@ function findEmptyCells() {
 function isEmptyCell(cell) {
     return cell === EMPTY
 }
+
