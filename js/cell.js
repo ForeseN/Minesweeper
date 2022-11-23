@@ -10,12 +10,22 @@ function getCellValue(cell) {
 
 function onCellClickedLeft(i, j) {
     if (!gGame.isOn) return
+    if (gGame.isSandboxNow) {
+        if (gBoard[i][j].isMine) gLevel.MINES--
+        else gLevel.MINES++
+        gBoard[i][j].isMine = !gBoard[i][j].isMine
+        openCell(i, j)
+        const elBombsRemain = document.querySelector(".bombs-remaining")
+        elBombsRemain.innerText = formatCounters(gLevel.MINES)
+        return
+    }
     if (!timerId) {
         // Game init
-        if (!gGame.isSevenBoom) {
+        if (!gGame.isSevenBoom && !gGame.isBuiltBySandbox) {
             // Sevenboom does it automatically
             setRandomMines(i, j)
             setMinesNegsCount(gBoard)
+            gBoardMoves.push(deepCopyMatrix(gBoard))
         }
         startTimer()
     }
@@ -56,7 +66,8 @@ function onCellClickedLeft(i, j) {
             openNearbyCells(i, j)
         }
     }
-
+    gBoardMoves.push(deepCopyMatrix(gBoard))
+    console.log(gBoardMoves)
     if (checkWin()) announceWin()
 }
 
@@ -67,6 +78,7 @@ function openCell(i, j) {
     elCell.classList.remove("unopened")
     elCell.classList.remove("marked") // Removing mark just in case
     elCell.classList.remove("safe")
+    elCell.classList.add("opened")
     elCell.innerHTML = getCellValue(cell)
 }
 

@@ -28,6 +28,7 @@ var hintTimeoutId
 var killMinesTimeoutId
 
 var gBoard
+var gBoardMoves = []
 
 var gLevel = {
     SIZE: BEGINNER_SIZE,
@@ -73,6 +74,8 @@ function clearSlate() {
         isMegaHint: false,
         canUseMegaHint: true,
         isSevenBoom: false,
+        isSandboxNow: false,
+        isBuiltBySandbox: false,
     }
 
     // Recover buttons
@@ -82,6 +85,8 @@ function clearSlate() {
     document.querySelector(".kill-mines").disabled = false
 
     gMines = []
+    megaHintFirstLoc = null
+    gBoardMoves = []
 }
 
 function buildBoard() {
@@ -320,6 +325,7 @@ function useMegaHint(i, j) {
     const megaHintSecondLoc = { i, j }
     for (let i = megaHintFirstLoc.i; i < megaHintSecondLoc.i + 1; i++) {
         for (let j = megaHintFirstLoc.j; j < megaHintSecondLoc.j + 1; j++) {
+            if (gBoard[i][j].isShown) continue
             openCell(i, j)
             megaHintTimeoutId = setTimeout(() => {
                 hideCell(i, j)
@@ -352,4 +358,50 @@ function isSevenBoom(num) {
     if (num % 7 === 0) return true
     if ((num + "").indexOf("7") > -1) return true
     return false
+}
+
+function onSandbox() {
+    if (gGame.isSandboxNow) {
+        // we need to start game!
+        gGame.isSandboxNow = false
+        for (let i = 0; i < gBoard.length; i++) {
+            for (let j = 0; j < gBoard[i].length; j++) {
+                const currCell = gBoard[i][j]
+                currCell.isShown = false
+                hideCell(i, j)
+            }
+        }
+        setMinesNegsCount(gBoard)
+        return
+    }
+    // Starting sandbox mode!
+    initGame()
+    gGame.isSandboxNow = true
+    gGame.isBuiltBySandbox = true
+    gLevel.MINES = 0
+    const elBombsRemain = document.querySelector(".bombs-remaining")
+    elBombsRemain.innerText = formatCounters(gLevel.MINES)
+    for (let i = 0; i < gBoard.length; i++) {
+        for (let j = 0; j < gBoard[i].length; j++) {
+            const currCell = gBoard[i][j]
+            currCell.isShown = true
+            openCell(i, j)
+        }
+    }
+}
+
+function onUndo() {
+    if (gBoardMoves.length - 1 < 0) return
+    console.log(gBoard)
+    gBoardMoves.pop()
+    gBoard = gBoardMoves[gBoardMoves.length - 1]
+    console.log(gBoard)
+    // renderBoard(gBoard, ".board-container")
+    for (let i = 0; i < gBoard.length; i++) {
+        for (let j = 0; j < gBoard[i].length; j++) {
+            const currCell = gBoard[i][j]
+            if (currCell.isShown) openCell(i, j)
+            else hideCell(i, j)
+        }
+    }
 }
