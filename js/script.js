@@ -6,6 +6,8 @@
 const MINE = "💣"
 const FLAG = "🚩"
 
+var timerId
+
 var gBoard
 // var gBoard = {
 //     minesAroundCount: 4,
@@ -26,12 +28,17 @@ var gGame = {
     secsPassed: 0
 }
 
+
 function initGame() {
     gBoard = buildBoard()
     setRandomMines()
     renderBoard(gBoard, '.board-container')
     setMinesNegsCount(gBoard)
     console.log(gMines)
+    startTimer()
+    gGame.isOn = true
+    const elBombsRemain = document.querySelector('.bombs-remaining')
+    elBombsRemain.innerText = formatCounters(gLevel.MINES)
 }
 
 function buildBoard() {
@@ -62,6 +69,7 @@ function getCellValue(cell) {
 
 function onCellClickedLeft(i, j) {
     const clickedCell = gBoard[i][j]
+    if (clickedCell.isMarked) return
     clickedCell.isShown = true
     renderCell(i, j)
     if (clickedCell.isMine) { // Clicked on Mine
@@ -108,10 +116,23 @@ function onCellClickedRight(i, j) {
     const cell = gBoard[i][j]
     if (cell.isShown) return
 
-    gBoard[i][j].isMarked = true
+
     const elCell = document.querySelector(`.cell-${i}-${j}`)
     cell.isMarked = true
-    elCell.classList.toggle('marked')
+    if (elCell.classList.contains('marked')) {
+        gBoard[i][j].isMarked = false
+        gGame.markedCount--
+        elCell.classList.remove('marked')
+    } else {
+        gBoard[i][j].isMarked = true
+        gGame.markedCount++
+        elCell.classList.add('marked')
+    }
+
+    const elBombsRemain = document.querySelector('.bombs-remaining')
+    var BombsRemain = gLevel.MINES - gGame.markedCount
+    var BombsRemainStr = formatCounters(BombsRemain)
+    elBombsRemain.innerText = BombsRemainStr
 
     if (checkWin()) announceWin()
 }
@@ -135,4 +156,28 @@ function announceWin() {
 
 function announceLose() {
 
+}
+
+function startTimer() {
+    const elTimer = document.querySelector('.container .timer')
+    var gStartTime = new Date().getTime();
+    timerId = setInterval(() => {
+        var now = new Date().getTime();
+        var timePassed = (now - gStartTime) / 1000
+        var timePassedStr = formatCounters(timePassed)
+        gGame.secsPassed = timePassed
+        elTimer.innerText = timePassedStr
+    }, 1000)
+}
+
+// gets num like 5 and returns 005
+function formatCounters(num) {
+    if (num >= 0 || num <= -10) {
+        return (Math.floor(num) + '').padStart(3, '0')
+    }
+
+    // num < 0
+    if (num > -10) {
+        return "-" + "0" + Math.floor(Math.abs(num))
+    }
 }
