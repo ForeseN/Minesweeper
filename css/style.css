@@ -1,0 +1,40 @@
+* {
+    caret-color: transparent;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+
+body {
+    background-color: #1d242f;
+    color: white;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+}
+
+.container h1 {
+    color: #EEE;
+    font-size: 3rem;
+    padding-bottom: 10%;
+}
+
+table {
+    border-spacing: 6px;
+}
+
+td {
+    background-color: #151a24;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.unopened {
+    background: #3f61d3;
+}
