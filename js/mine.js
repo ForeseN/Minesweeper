@@ -43,7 +43,7 @@ function setRandomMines() {
         }
         emptyCells.splice(randomIndex, 1)
 
-        gMines.push({ i: emptyCell.j, j: emptyCell.i })
+        gMines.push({ i: emptyCell.i, j: emptyCell.j })
     }
 
 

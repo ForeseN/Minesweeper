@@ -12,9 +12,9 @@ function renderBoard(mat, selector) {
             const type = cell.isMine ? "Mine" : ""
             const condition = cell.isShown ? "opened" : "unopened"
             const className = `cell cell-${i}-${j} ${type} ${condition}`
-            let value = getCellValue(cell)
+            // let value = getCellValue(cell)
 
-            strHTML += `<td class="${className}" onclick="onCellClickedLeft(${i},${j})" oncontextmenu="onCellClickedRight(${i},${j})";>${value}</td>`
+            strHTML += `<td class="${className}" onclick="onCellClickedLeft(${i},${j})" oncontextmenu="onCellClickedRight(${i},${j})";></td>`
         }
         strHTML += '</tr>'
     }
