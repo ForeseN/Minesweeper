@@ -61,6 +61,10 @@ function clearSlate() {
         safeClick: 3,
     }
 
+    // Recover buttons
+    document.querySelector(".hint").disabled = false
+    document.querySelector(".safe-click").disabled = false
+
     gMines = []
 }
 
@@ -201,13 +205,17 @@ function useHint(rowIdx, colIdx) {
 
 function onSafeClick() {
     if (gGame.safeClick <= 0) return
+    gGame.safeClick--
+    if (gGame.safeClick === 0) {
+        // Disable button
+        document.querySelector(".safe-click").disabled = true
+    }
 
     const safeClicks = getSafeClicks()
     const randomIndex = getRandomIntInclusive(0, safeClicks.length - 1)
     const randCell = safeClicks[randomIndex]
     const elCell = document.querySelector(`.cell-${randCell.i}-${randCell.j}`)
     elCell.classList.add("safe")
-    console.log(elCell.classList)
 }
 
 function getSafeClicks() {
