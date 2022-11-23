@@ -3,6 +3,7 @@
 const BEGINNER_MINES_AMOUNT = 2
 const MEDIUM_MINES_AMOUNT = 14
 const EXPERT_MINES_AMOUNT = 32
+const gMines = []
 
 function setMinesNegsCount(board) {
     for (let i = 0; i < board.length; i++) {
@@ -41,6 +42,8 @@ function setRandomMines() {
             isMarked: false
         }
         emptyCells.splice(randomIndex, 1)
+
+        gMines.push({ i: emptyCell.j, j: emptyCell.i })
     }
 
 

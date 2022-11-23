@@ -31,6 +31,7 @@ function initGame() {
     setRandomMines()
     renderBoard(gBoard, '.board-container')
     setMinesNegsCount(gBoard)
+    console.log(gMines)
 }
 
 function buildBoard() {
@@ -69,6 +70,9 @@ function onCellClickedLeft(i, j) {
         openNearbyCells(i, j)
     }
 
+    if (checkWin()) announceWin()
+
+
 
 }
 
@@ -104,7 +108,31 @@ function onCellClickedRight(i, j) {
     const cell = gBoard[i][j]
     if (cell.isShown) return
 
+    gBoard[i][j].isMarked = true
     const elCell = document.querySelector(`.cell-${i}-${j}`)
     cell.isMarked = true
     elCell.classList.toggle('marked')
+
+    if (checkWin()) announceWin()
+}
+
+function checkWin() {
+    for (let i = 0; i < gBoard.length; i++) {
+        for (let j = 0; j < gBoard[0].length; j++) {
+            const currCell = gBoard[i][j]
+            // if mine and not marked NOT WIN!
+            if (currCell.isMine && !currCell.isMarked) return false
+            // if not mine and not shown NOT WIN!
+            if (!currCell.isMine && !currCell.isShown) return false
+        }
+    }
+    return true
+}
+
+function announceWin() {
+
+}
+
+function announceLose() {
+
 }
