@@ -31,8 +31,8 @@ var gBoard
 var gBoardMoves = []
 
 var gLevel = {
-    SIZE: BEGINNER_SIZE,
-    MINES: BEGINNER_MINES_AMOUNT,
+    SIZE: MEDIUM_SIZE,
+    MINES: MEDIUM_MINES_AMOUNT,
 }
 
 var megaHintFirstLoc
@@ -396,4 +396,8 @@ function onUndo() {
     gBoardMoves.pop()
     gBoard = gBoardMoves[gBoardMoves.length - 1]
     renderBoardCellByCell()
+}
+
+function onToggleTheme(){
+    
 }
