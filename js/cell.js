@@ -22,11 +22,18 @@ function onCellClickedLeft(i, j) {
         return
     }
 
+    if (gGame.isMegaHint) {
+        useMegaHint(i, j)
+        return
+    }
+
     const clickedCell = gBoard[i][j]
     if (clickedCell.isMarked || clickedCell.isShown) return
     clickedCell.isShown = true
     openCell(i, j)
     if (clickedCell.isMine) {
+        const elCell = document.querySelector(`.cell-${i}-${j}`)
+        elCell.style.backgroundColor = "red"
         // Clicked on Mine
         gGame.lives--
         renderLives()

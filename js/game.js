@@ -31,6 +31,8 @@ var gLevel = {
     MINES: BEGINNER_MINES_AMOUNT,
 }
 
+var megaHintFirstLoc
+
 var gGame
 
 function initGame() {
@@ -62,6 +64,8 @@ function clearSlate() {
         hints: 3,
         safeClick: 3,
         isKilled: false,
+        isMegaHint: false,
+        canUseMegaHint: true,
     }
 
     // Recover buttons
@@ -93,7 +97,8 @@ function checkWin() {
         for (let j = 0; j < gBoard[0].length; j++) {
             const currCell = gBoard[i][j]
             // if mine and not marked NOT WIN!
-            if (currCell.isMine && !currCell.isMarked) return false
+            if (currCell.isMine && !currCell.isMarked && !currCell.isShown)
+                return false
             // if not mine and not shown NOT WIN!
             if (!currCell.isMine && !currCell.isShown) return false
         }
@@ -288,4 +293,29 @@ function updateNeighbors(rowIdx, colIdx) {
             openCell(i, j)
         }
     }
+}
+
+function onMegaHint() {
+    if (!gGame.canUseMegaHint) return // it means we already used it!
+    gGame.isMegaHint = true
+    gGame.canUseMegaHint = false
+}
+
+function useMegaHint(i, j) {
+    if (!megaHintFirstLoc) {
+        megaHintFirstLoc = { i, j }
+        return // we need to choose another one
+    }
+    const megaHintSecondLoc = { i, j }
+    for (let i = megaHintFirstLoc.i; i < megaHintSecondLoc.i + 1; i++) {
+        for (let j = megaHintFirstLoc.j; j < megaHintSecondLoc.j + 1; j++) {
+            openCell(i, j)
+            setTimeout(() => {
+                hideCell(i, j)
+            }, 2000)
+        }
+    }
+
+    document.querySelector(".mega-hint").disabled = true
+    gGame.isMegaHint = false
 }
