@@ -3,6 +3,8 @@
 // Elements
 // const elContainer = document.querySelector('.container')
 
+const MINE = "💣"
+
 var gBoard
 // var gBoard = {
 //     minesAroundCount: 4,

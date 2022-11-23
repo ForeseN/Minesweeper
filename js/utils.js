@@ -13,8 +13,14 @@ function renderBoard(mat, selector) {
             const type = cell.isMine ? "Mine" : ""
             const condition = cell.isShown ? "opened" : "unopened"
             const className = `cell cell-${i}-${j} ${type} ${condition}`
+            let value = ""
+            if (cell.isShown) {
+                if (cell.isMine) value = MINE
+                else if (cell.minesAroundCount === 0) value = ""
+                else value = cell.minesAroundCount
+            }
 
-            strHTML += `<td class="${className}"></td>`
+            strHTML += `<td class="${className}">${value}</td>`
         }
         strHTML += '</tr>'
     }

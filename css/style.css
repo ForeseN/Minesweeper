@@ -33,6 +33,8 @@ td {
     height: 50px;
     cursor: pointer;
     border-radius: 6px;
+    text-align: center;
+    font-size: 1.4rem;
 }
 
 .unopened {
