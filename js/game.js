@@ -23,6 +23,9 @@ const EXTERMINATOR_AMOUNT = 3
 
 var timerId
 var gStartTime
+var megaHintTimeoutId
+var hintTimeoutId
+var killMinesTimeoutId
 
 var gBoard
 
@@ -53,6 +56,9 @@ function clearSlate() {
     document.querySelector(".container .timer").innerText = "000"
     document.querySelector(".smiley").innerText = SMILEY_REGULAR
     document.querySelector(".lives").innerText = `${LIFE}${LIFE}${LIFE}`
+    clearTimeout(megaHintTimeoutId)
+    clearTimeout(hintTimeoutId)
+    clearTimeout(killMinesTimeoutId)
 
     gGame = {
         isOn: false,
@@ -66,11 +72,14 @@ function clearSlate() {
         isKilled: false,
         isMegaHint: false,
         canUseMegaHint: true,
+        isSevenBoom: false,
     }
 
     // Recover buttons
     document.querySelector(".hint").disabled = false
     document.querySelector(".safe-click").disabled = false
+    document.querySelector(".mega-hint").disabled = false
+    document.querySelector(".kill-mines").disabled = false
 
     gMines = []
 }
@@ -201,7 +210,7 @@ function useHint(rowIdx, colIdx) {
             hideAfterHintCells.push({ i, j })
         }
     }
-    setTimeout(() => {
+    hintTimeoutId = setTimeout(() => {
         hideCells(hideAfterHintCells)
         if (gGame.hints === 0) {
             // DISABLE BUTTON (Here for smoothness of gameplay)
@@ -246,8 +255,9 @@ function onKillMines() {
     gGame.isKilled = true
     document.querySelector(".kill-mines").disabled = true
     const unmarkedMines = getUnmarkedMines()
+    const unmarkedMinesLength = unmarkedMines.length // static length
 
-    for (let i = 0; i < EXTERMINATOR_AMOUNT && i < unmarkedMines.length; i++) {
+    for (let i = 0; i < EXTERMINATOR_AMOUNT && i < unmarkedMinesLength; i++) {
         if (gMines.length === 0) return // happens in easy mode
 
         const randomIndex = getRandomIntInclusive(0, unmarkedMines.length - 1)
@@ -259,7 +269,7 @@ function onKillMines() {
             `.cell-${randCell.i}-${randCell.j}`
         )
         elCell.classList.add("kill")
-        setTimeout(() => {
+        killMinesTimeoutId = setTimeout(() => {
             console.log(randCell.i, randCell.j)
             elCell.classList.remove("kill")
             gBoard[randCell.i][randCell.j].isMine = false
@@ -267,6 +277,7 @@ function onKillMines() {
             setMinesNegsCount(gBoard)
             updateNeighbors(randCell.i, randCell.j)
         }, 3000)
+        unmarkedMines.splice(unmarkedMines.indexOf(randCell), 1)
     }
 }
 
@@ -310,7 +321,7 @@ function useMegaHint(i, j) {
     for (let i = megaHintFirstLoc.i; i < megaHintSecondLoc.i + 1; i++) {
         for (let j = megaHintFirstLoc.j; j < megaHintSecondLoc.j + 1; j++) {
             openCell(i, j)
-            setTimeout(() => {
+            megaHintTimeoutId = setTimeout(() => {
                 hideCell(i, j)
             }, 2000)
         }
@@ -318,4 +329,27 @@ function useMegaHint(i, j) {
 
     document.querySelector(".mega-hint").disabled = true
     gGame.isMegaHint = false
+}
+
+function onSevenBoom() {
+    initGame()
+    gGame.isSevenBoom = true
+    var cellIndex = 1
+    for (let i = 0; i < gBoard.length; i++) {
+        for (let j = 0; j < gBoard[0].length; j++) {
+            var cell = gBoard[i][j]
+            if (isSevenBoom(cellIndex)) {
+                cell.isMine = true
+                gMines.push({ i, j })
+            }
+            cellIndex++
+        }
+    }
+    setMinesNegsCount(gBoard)
+}
+
+function isSevenBoom(num) {
+    if (num % 7 === 0) return true
+    if ((num + "").indexOf("7") > -1) return true
+    return false
 }

@@ -12,8 +12,11 @@ function onCellClickedLeft(i, j) {
     if (!gGame.isOn) return
     if (!timerId) {
         // Game init
-        setRandomMines(i, j)
-        setMinesNegsCount(gBoard)
+        if (!gGame.isSevenBoom) {
+            // Sevenboom does it automatically
+            setRandomMines(i, j)
+            setMinesNegsCount(gBoard)
+        }
         startTimer()
     }
 

@@ -186,6 +186,8 @@ td {
     outline: none;
     cursor: pointer;
     margin-bottom: 10px;
+    height: 70px;
+    width: 70px;
 }
 
 .utilities button:not([disabled]):active {
