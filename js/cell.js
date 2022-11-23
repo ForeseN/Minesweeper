@@ -10,6 +10,8 @@ function onCellClickedLeft(i, j) {
     if (!gGame.isOn) return
     if (!timerId) {
         // Game init
+        setRandomMines(i, j)
+        setMinesNegsCount(gBoard)
         startTimer()
     }
 
@@ -24,7 +26,7 @@ function onCellClickedLeft(i, j) {
         // Clicked on Number
         if (clickedCell.minesAroundCount > 0) {
             clickedCell.isOpened = true
-            currCell.isShown = true
+            clickedCell.isShown = true
         } else {
             // Clicked on Empty
             openNearbyCells(i, j)

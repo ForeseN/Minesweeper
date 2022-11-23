@@ -1,4 +1,4 @@
-'use strict'
+"use strict"
 
 const gMines = []
 
@@ -9,7 +9,6 @@ function setMinesNegsCount(board) {
             cell.minesAroundCount = getMineNegsCount(board, i, j)
         }
     }
-
 }
 
 function getMineNegsCount(board, rowIdx, colIdx) {
@@ -25,9 +24,12 @@ function getMineNegsCount(board, rowIdx, colIdx) {
     }
     return mines
 }
-
-function setRandomMines() {
+// gets i,j as a param to make sure it won't be a mine
+// on first time click
+function setRandomMines(i, j) {
     const emptyCells = findEmptyCells()
+    removeNeighbors(i, j, emptyCells)
+    console.log(emptyCells)
     for (let i = 0; i < gLevel.MINES; i++) {
         const randomIndex = getRandomIntInclusive(0, emptyCells.length - 1)
         const emptyCell = emptyCells[randomIndex]
@@ -36,12 +38,26 @@ function setRandomMines() {
             minesAroundCount: 0,
             isShown: false,
             isMine: true,
-            isMarked: false
+            isMarked: false,
         }
         emptyCells.splice(randomIndex, 1)
 
         gMines.push({ i: emptyCell.i, j: emptyCell.j })
     }
+}
 
+function removeNeighbors(rowIdx, colIdx, emptyCells) {
+    for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
+        if (i < 0 || i >= gBoard.length) continue
+        for (var j = colIdx - 1; j <= colIdx + 1; j++) {
+            if (j < 0 || j >= gBoard[0].length) continue
 
+            // Find and remove it!
+            for (var k = 0; k < emptyCells.length; k++) {
+                if (emptyCells[k].i === i && emptyCells[k].j === j) {
+                    emptyCells.splice(k, 1)
+                }
+            }
+        }
+    }
 }

@@ -6,11 +6,16 @@
     color: #EEE;
 }
 
+
 body {
-    background-color: #191d25;
+    /* background-color: #191d25; */
+    background: rgb(29, 36, 47);
+    background: linear-gradient(180deg, rgba(29, 36, 47, 1) 0%, rgba(11, 13, 15, 1) 63%);
     color: white;
     overflow: hidden;
+    height: 100vh;
 }
+
 
 img {
     width: 23px;
@@ -21,7 +26,6 @@ img {
 .container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     height: 100%;
 }

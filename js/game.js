@@ -37,13 +37,14 @@ var gGame = {
 
 function initGame() {
     if (timerId) {
+        // restart
         clearInterval(timerId)
         timerId = null
     }
     gBoard = buildBoard()
-    setRandomMines()
+    // setRandomMines()
     renderBoard(gBoard, ".board-container")
-    setMinesNegsCount(gBoard)
+    // setMinesNegsCount(gBoard)
     gGame.isOn = true
     clearSlate()
 }
