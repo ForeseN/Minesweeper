@@ -14,7 +14,7 @@ function renderBoard(mat, selector) {
             const className = `cell cell-${i}-${j} ${type} ${condition}`
             let value = getCellValue(cell)
 
-            strHTML += `<td class="${className}" onclick="cellClicked(${i},${j})">${value}</td>`
+            strHTML += `<td class="${className}" onclick="onCellClickedLeft(${i},${j})" oncontextmenu="onCellClickedRight(${i},${j})";>${value}</td>`
         }
         strHTML += '</tr>'
     }

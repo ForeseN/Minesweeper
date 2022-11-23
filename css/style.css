@@ -41,3 +41,11 @@ td {
 .unopened {
     background: #3f61d3;
 }
+
+.marked {
+    background-color: #ecc457;
+}
+
+.marked:after {
+    content: "🚩";
+}
