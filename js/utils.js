@@ -1,13 +1,10 @@
-'use strict'
+"use strict"
 
 function renderBoard(mat, selector) {
-
     var strHTML = '<table border="0"><tbody>'
     for (var i = 0; i < mat.length; i++) {
-
-        strHTML += '<tr>'
+        strHTML += "<tr>"
         for (var j = 0; j < mat[0].length; j++) {
-
             const cell = mat[i][j]
             const type = cell.isMine ? "Mine" : ""
             const condition = cell.isShown ? "opened" : "unopened"
@@ -16,9 +13,9 @@ function renderBoard(mat, selector) {
 
             strHTML += `<td class="${className}" onclick="onCellClickedLeft(${i},${j})" oncontextmenu="onCellClickedRight(${i},${j})";></td>`
         }
-        strHTML += '</tr>'
+        strHTML += "</tr>"
     }
-    strHTML += '</tbody></table>'
+    strHTML += "</tbody></table>"
 
     const elContainer = document.querySelector(selector)
     elContainer.innerHTML = strHTML
@@ -26,20 +23,19 @@ function renderBoard(mat, selector) {
 
 // location is an object like this - { i: 2, j: 7 }
 
-
 function getRandomIntInclusive(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
 function showElement(elem) {
-    elem.classList.remove('hidden')
+    elem.classList.remove("hidden")
 }
 function hideElement(elem) {
-    elem.classList.add('hidden')
+    elem.classList.add("hidden")
 }
 
 function getRandomColor() {
-    return '#' + Math.floor(Math.random() * 16777215).toString(16);
+    return "#" + Math.floor(Math.random() * 16777215).toString(16)
 }
 
 function findEmptyCells() {
@@ -57,3 +53,14 @@ function isEmptyCell(cell) {
     return !cell.isMine
 }
 
+// gets num like 5 and returns 005
+function formatCounters(num) {
+    if (num >= 0 || num <= -10) {
+        return (Math.floor(num) + "").padStart(3, "0")
+    }
+
+    // num < 0
+    if (num > -10) {
+        return "-" + "0" + Math.floor(Math.abs(num))
+    }
+}

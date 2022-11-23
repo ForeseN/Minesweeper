@@ -1,3 +1,5 @@
+"use strict"
+
 function getCellValue(cell) {
     let value = ""
     if (cell.isMine) value = MINE
@@ -23,7 +25,9 @@ function onCellClickedLeft(i, j) {
     const clickedCell = gBoard[i][j]
     if (clickedCell.isMarked || clickedCell.isShown) return
     clickedCell.isShown = true
+    console.log("BEFORE")
     openCell(i, j)
+    console.log("AFTER")
     if (clickedCell.isMine) {
         // Clicked on Mine
         gGame.lives--
@@ -50,10 +54,12 @@ function onCellClickedLeft(i, j) {
 
 function openCell(i, j) {
     // Select the elCell and set the value
+    console.log(i, j)
     const cell = gBoard[i][j]
     const elCell = document.querySelector(`.cell-${i}-${j}`)
     elCell.classList.remove("unopened")
     elCell.classList.remove("marked") // Removing mark just in case
+    elCell.classList.remove("safe")
     elCell.innerHTML = getCellValue(cell)
 }
 
@@ -108,4 +114,20 @@ function onCellClickedRight(i, j) {
     elBombsRemain.innerText = BombsRemainStr
 
     if (checkWin()) announceWin()
+}
+
+function hideCells(cells) {
+    for (let i = 0; i < cells.length; i++) {
+        const currCell = cells[i]
+        hideCell(currCell.i, currCell.j)
+    }
+    console.log(gBoard)
+}
+
+function hideCell(i, j) {
+    const cell = gBoard[i][j]
+    cell.isShown = false
+    const elCell = document.querySelector(`.cell-${i}-${j}`)
+    elCell.classList.add("unopened")
+    elCell.innerText = ""
 }

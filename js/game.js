@@ -29,14 +29,7 @@ var gLevel = {
     MINES: BEGINNER_MINES_AMOUNT,
 }
 
-var gGame = {
-    isOn: false,
-    shownCount: 0,
-    markedCount: 0,
-    secsPassed: 0,
-    lives: 3,
-    isHint: false,
-}
+var gGame
 
 function initGame() {
     if (timerId) {
@@ -45,9 +38,7 @@ function initGame() {
         timerId = null
     }
     gBoard = buildBoard()
-    // setRandomMines()
     renderBoard(gBoard, ".board-container")
-    // setMinesNegsCount(gBoard)
     clearSlate()
     gGame.isOn = true
 }
@@ -67,6 +58,7 @@ function clearSlate() {
         lives: 3,
         isHint: false,
         hints: 3,
+        safeClick: 3,
     }
 
     gMines = []
@@ -132,18 +124,6 @@ function startTimer() {
         gGame.secsPassed = timePassed
         elTimer.innerText = timePassedStr
     }, 500) // 500 just in case
-}
-
-// gets num like 5 and returns 005
-function formatCounters(num) {
-    if (num >= 0 || num <= -10) {
-        return (Math.floor(num) + "").padStart(3, "0")
-    }
-
-    // num < 0
-    if (num > -10) {
-        return "-" + "0" + Math.floor(Math.abs(num))
-    }
 }
 
 function changeDifficulty(difficulty) {
@@ -219,28 +199,24 @@ function useHint(rowIdx, colIdx) {
     gGame.isHint = false
 }
 
-function hideCells(cells) {
-    for (let i = 0; i < cells.length; i++) {
-        const currCell = cells[i]
-        hideCell(currCell.i, currCell.j)
+function onSafeClick() {
+    if (gGame.safeClick <= 0) return
+
+    const safeClicks = getSafeClicks()
+    const randomIndex = getRandomIntInclusive(0, safeClicks.length - 1)
+    const randCell = safeClicks[randomIndex]
+    const elCell = document.querySelector(`.cell-${randCell.i}-${randCell.j}`)
+    elCell.classList.add("safe")
+    console.log(elCell.classList)
+}
+
+function getSafeClicks() {
+    const safeClicks = []
+    for (let i = 0; i < gLevel.SIZE; i++) {
+        for (let j = 0; j < gLevel.SIZE; j++) {
+            const currCell = gBoard[i][j]
+            if (!currCell.isMine && !currCell.isShown) safeClicks.push({ i, j })
+        }
     }
-    console.log(gBoard)
-}
-
-function hideCell(i, j) {
-    const cell = gBoard[i][j]
-    cell.isShown = false
-    const elCell = document.querySelector(`.cell-${i}-${j}`)
-    elCell.classList.add("unopened")
-    elCell.innerText = ""
-}
-
-function openCell(i, j) {
-    // Select the elCell and set the value
-    const cell = gBoard[i][j]
-    cell.isShown = true
-    const elCell = document.querySelector(`.cell-${i}-${j}`)
-    elCell.classList.remove("unopened")
-    elCell.classList.remove("marked") // Removing mark just in case
-    elCell.innerHTML = getCellValue(cell)
+    return safeClicks
 }

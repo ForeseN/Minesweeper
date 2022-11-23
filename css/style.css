@@ -200,3 +200,17 @@ td {
     background-color: rgb(49, 49, 52);
     cursor: auto;
 }
+
+.safe {
+    animation: opacityChange 0.5s infinite alternate;
+}
+
+@keyframes opacityChange {
+    0% {
+        opacity: 100%;
+    }
+
+    100% {
+        opacity: 0%;
+    }
+}
