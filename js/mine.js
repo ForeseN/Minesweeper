@@ -1,5 +1,9 @@
 'use strict'
 
+const BEGINNER_MINES_AMOUNT = 2
+const MEDIUM_MINES_AMOUNT = 14
+const EXPERT_MINES_AMOUNT = 32
+
 function setMinesNegsCount(board) {
     for (let i = 0; i < board.length; i++) {
         for (let j = 0; j < board[0].length; j++) {
@@ -22,4 +26,22 @@ function getMineNegsCount(board, rowIdx, colIdx) {
         }
     }
     return mines
+}
+
+function setRandomMines() {
+    const emptyCells = findEmptyCells()
+    for (let i = 0; i < gLevel.MINES; i++) {
+        const randomIndex = getRandomIntInclusive(0, emptyCells.length - 1)
+        const emptyCell = emptyCells[randomIndex]
+
+        gBoard[emptyCell.i][emptyCell.j] = {
+            minesAroundCount: 0,
+            isShown: false,
+            isMine: true,
+            isMarked: false
+        }
+        emptyCells.splice(randomIndex, 1)
+    }
+
+
 }

@@ -31,6 +31,9 @@ function initGame() {
     console.log(gBoard)
     setMinesNegsCount(gBoard)
     renderBoard(gBoard, '.board-container')
+    setRandomMines()
+    renderBoard(gBoard, '.board-container')
+    setMinesNegsCount(gBoard)
 }
 
 function buildBoard() {
@@ -40,26 +43,11 @@ function buildBoard() {
         for (let j = 0; j < gLevel.SIZE; j++) {
             board[i][j] = {
                 minesAroundCount: 0,
-                isShown: true,
+                isShown: false,
                 isMine: false,
                 isMarked: false
             }
-
         }
-
-
-    }
-    board[1][1] = {
-        minesAroundCount: 0,
-        isShown: true,
-        isMine: true,
-        isMarked: false
-    }
-    board[2][2] = {
-        minesAroundCount: 0,
-        isShown: true,
-        isMine: true,
-        isMarked: false
     }
     return board
 }
@@ -72,4 +60,17 @@ function getCellValue(cell) {
         else value = cell.minesAroundCount
     }
     return value
+}
+
+function cellClicked(i, j) {
+    gBoard[i][j].isShown = true
+    renderCell(i, j)
+}
+
+function renderCell(i, j) {
+    // Select the elCell and set the value
+    const cell = gBoard[i][j]
+    const elCell = document.querySelector(`.cell-${i}-${j}`)
+    elCell.classList.remove('unopened')
+    elCell.innerText = getCellValue(cell)
 }

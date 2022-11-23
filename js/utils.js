@@ -14,7 +14,7 @@ function renderBoard(mat, selector) {
             const className = `cell cell-${i}-${j} ${type} ${condition}`
             let value = getCellValue(cell)
 
-            strHTML += `<td class="${className}">${value}</td>`
+            strHTML += `<td class="${className}" onclick="cellClicked(${i},${j})">${value}</td>`
         }
         strHTML += '</tr>'
     }
@@ -25,11 +25,7 @@ function renderBoard(mat, selector) {
 }
 
 // location is an object like this - { i: 2, j: 7 }
-function renderCell(location, value) {
-    // Select the elCell and set the value
-    const elCell = document.querySelector(`.cell-${location.i}-${location.j}`)
-    elCell.innerHTML = value
-}
+
 
 function getRandomIntInclusive(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min
@@ -58,6 +54,6 @@ function findEmptyCells() {
 }
 
 function isEmptyCell(cell) {
-    return cell === EMPTY
+    return !cell.isMine
 }
 
