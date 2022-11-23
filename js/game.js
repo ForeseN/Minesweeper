@@ -403,6 +403,7 @@ function onUndo() {
 }
 
 function onToggleTheme() {
+    isDark = false
     const elToggleBtn = document.querySelector(".utilities .toggle-theme")
     if (elToggleBtn.innerText === LIGHT_THEME) {
         elToggleBtn.innerText = DARK_THEME
@@ -418,13 +419,17 @@ function onToggleTheme() {
     for (let i = 0; i < btns.length; i++) {
         btns[i].classList.toggle("light")
     }
-    var unopenedElements = document.querySelectorAll(".unopened")
-    for (let i = 0; i < unopenedElements.length; i++) {
-        unopenedElements[i].classList.toggle("light")
-    }
-    var openedElements = document.querySelectorAll(".opened")
-    for (let i = 0; i < openedElements.length; i++) {
-        openedElements[i].classList.toggle("light")
+    // var unopenedElements = document.querySelectorAll(".unopened")
+    // for (let i = 0; i < unopenedElements.length; i++) {
+    //     unopenedElements[i].classList.toggle("light")
+    // }
+    // var openedElements = document.querySelectorAll(".opened")
+    // for (let i = 0; i < openedElements.length; i++) {
+    //     openedElements[i].classList.toggle("light")
+    // }
+    var cellElements = document.querySelectorAll(".cell")
+    for (let i = 0; i < cellElements.length; i++) {
+        cellElements[i].classList.toggle("light")
     }
     btns = document.querySelectorAll(".difficulty-container button")
     for (let i = 0; i < btns.length; i++) {

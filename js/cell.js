@@ -79,6 +79,7 @@ function openCell(i, j) {
     elCell.classList.remove("marked") // Removing mark just in case
     elCell.classList.remove("safe")
     elCell.classList.add("opened")
+    // if (!isDark) elCell.add("light")
     elCell.innerHTML = getCellValue(cell)
 }
 
@@ -147,5 +148,14 @@ function hideCell(i, j) {
     cell.isShown = false
     const elCell = document.querySelector(`.cell-${i}-${j}`)
     elCell.classList.add("unopened")
+    elCell.classList.remove("opened")
     elCell.innerText = ""
 }
+
+// TODO
+// 1. Fix light mode bugs when using 7boom or sandbox
+// 2. clean CSS & HTML
+// 3. Go over JS and see what can we fix
+// 4. Add specials js folder to keep things organized
+// 5. add local storage
+// 6. make it even prettier!
