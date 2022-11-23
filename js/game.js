@@ -19,6 +19,8 @@ const BEGINNER_SIZE = 4
 const MEDIUM_SIZE = 8
 const EXPERT_SIZE = 12
 
+const EXTERMINATOR_AMOUNT = 3
+
 var timerId
 var gStartTime
 
@@ -59,6 +61,7 @@ function clearSlate() {
         isHint: false,
         hints: 3,
         safeClick: 3,
+        isKilled: false,
     }
 
     // Recover buttons
@@ -205,17 +208,21 @@ function useHint(rowIdx, colIdx) {
 
 function onSafeClick() {
     if (gGame.safeClick <= 0) return
+
+    const safeClicks = getSafeClicks()
+
+    if (safeClicks.length === 0) return // NO EMPTY CELLS!
+
+    const randomIndex = getRandomIntInclusive(0, safeClicks.length - 1)
+    const randCell = safeClicks[randomIndex]
+    const elCell = document.querySelector(`.cell-${randCell.i}-${randCell.j}`)
+    elCell.classList.add("safe")
+
     gGame.safeClick--
     if (gGame.safeClick === 0) {
         // Disable button
         document.querySelector(".safe-click").disabled = true
     }
-
-    const safeClicks = getSafeClicks()
-    const randomIndex = getRandomIntInclusive(0, safeClicks.length - 1)
-    const randCell = safeClicks[randomIndex]
-    const elCell = document.querySelector(`.cell-${randCell.i}-${randCell.j}`)
-    elCell.classList.add("safe")
 }
 
 function getSafeClicks() {
@@ -227,4 +234,58 @@ function getSafeClicks() {
         }
     }
     return safeClicks
+}
+
+function onKillMines() {
+    if (gGame.isKilled || gMines.length === 0) return
+    gGame.isKilled = true
+    document.querySelector(".kill-mines").disabled = true
+    const unmarkedMines = getUnmarkedMines()
+
+    for (let i = 0; i < EXTERMINATOR_AMOUNT && i < unmarkedMines.length; i++) {
+        if (gMines.length === 0) return // happens in easy mode
+
+        const randomIndex = getRandomIntInclusive(0, unmarkedMines.length - 1)
+        const randCell = unmarkedMines[randomIndex]
+        console.log(randCell)
+        gBoard[randCell.i][randCell.j].isShown = true
+        openCell(randCell.i, randCell.j)
+        const elCell = document.querySelector(
+            `.cell-${randCell.i}-${randCell.j}`
+        )
+        elCell.classList.add("kill")
+        setTimeout(() => {
+            console.log(randCell.i, randCell.j)
+            elCell.classList.remove("kill")
+            gBoard[randCell.i][randCell.j].isMine = false
+            openCell(randCell.i, randCell.j)
+            setMinesNegsCount(gBoard)
+            updateNeighbors(randCell.i, randCell.j)
+        }, 3000)
+    }
+}
+
+function getUnmarkedMines() {
+    const unmarkedMines = []
+    for (let i = 0; i < gMines.length; i++) {
+        const currMine = gMines[i]
+        if (!gBoard[currMine.i][currMine.j].isMarked) {
+            unmarkedMines.push(currMine)
+        }
+    }
+    return unmarkedMines
+}
+
+function updateNeighbors(rowIdx, colIdx) {
+    for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
+        if (i < 0 || i >= gBoard.length) continue
+        for (var j = colIdx - 1; j <= colIdx + 1; j++) {
+            if (j < 0 || j >= gBoard[0].length) continue
+            const currCell = gBoard[i][j]
+            if (currCell.isMine || currCell.isMarked || !currCell.isShown) {
+                continue
+            }
+            openCell(i, j)
+        }
+    }
 }

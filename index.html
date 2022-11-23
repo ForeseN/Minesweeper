@@ -9,7 +9,9 @@
     <title>Minesweeper</title>
 </head>
 
-<body onload="initGame()" oncontextmenu="return false;">
+<!-- <body onload="initGame()" oncontextmenu="return false;"> -->
+
+<body onload="initGame()">
     <div class="container">
         <h1>Minesweeper</h1>
         <div class="difficulty-container">
@@ -21,7 +23,7 @@
             <div class="utilities">
                 <button class="hint hold" onclick="onHint()">💡</button>
                 <button class="safe-click" onclick="onSafeClick()">🛡️</button>
-                <button>Test</button>
+                <button class="kill-mines" onclick="onKillMines()">💀</button>
                 <button>Test</button>
             </div>
             <div class="game-card">

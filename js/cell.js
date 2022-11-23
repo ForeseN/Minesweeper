@@ -25,9 +25,7 @@ function onCellClickedLeft(i, j) {
     const clickedCell = gBoard[i][j]
     if (clickedCell.isMarked || clickedCell.isShown) return
     clickedCell.isShown = true
-    console.log("BEFORE")
     openCell(i, j)
-    console.log("AFTER")
     if (clickedCell.isMine) {
         // Clicked on Mine
         gGame.lives--
@@ -54,7 +52,6 @@ function onCellClickedLeft(i, j) {
 
 function openCell(i, j) {
     // Select the elCell and set the value
-    console.log(i, j)
     const cell = gBoard[i][j]
     const elCell = document.querySelector(`.cell-${i}-${j}`)
     elCell.classList.remove("unopened")
@@ -121,7 +118,6 @@ function hideCells(cells) {
         const currCell = cells[i]
         hideCell(currCell.i, currCell.j)
     }
-    console.log(gBoard)
 }
 
 function hideCell(i, j) {
