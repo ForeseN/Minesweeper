@@ -391,17 +391,9 @@ function onSandbox() {
 }
 
 function onUndo() {
-    if (gBoardMoves.length - 1 < 0) return
-    console.log(gBoard)
+    if (gBoardMoves.length === 1) return
+    console.log(gBoardMoves)
     gBoardMoves.pop()
     gBoard = gBoardMoves[gBoardMoves.length - 1]
-    console.log(gBoard)
-    // renderBoard(gBoard, ".board-container")
-    for (let i = 0; i < gBoard.length; i++) {
-        for (let j = 0; j < gBoard[i].length; j++) {
-            const currCell = gBoard[i][j]
-            if (currCell.isShown) openCell(i, j)
-            else hideCell(i, j)
-        }
-    }
+    renderBoardCellByCell()
 }

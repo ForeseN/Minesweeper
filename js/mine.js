@@ -60,21 +60,3 @@ function removeNeighbors(rowIdx, colIdx, emptyCells) {
         }
     }
 }
-
-function deepCopyMatrix(mat) {
-    const res = []
-    for (let i = 0; i < mat.length; i++) {
-        res[i] = []
-        for (let j = 0; j < mat[0].length; j++) {
-            const currCell = mat[i][j]
-            res[i][j] = {
-                minesAroundCount: currCell.minesAroundCount,
-                isShown: currCell.isShown,
-                isMine: currCell.isMine,
-                isMarked: currCell.isMarked,
-                isOpened: currCell.isOpened,
-            }
-        }
-    }
-    return res
-}
