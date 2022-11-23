@@ -13,14 +13,14 @@
     <div class="container">
         <h1>Minesweeper</h1>
         <div class="difficulty-container">
-            <button>Beginner</button>
-            <button>Medium</button>
-            <button>Expert</button>
+            <button onclick="changeDifficulty('beginner')">Beginner</button>
+            <button onclick="changeDifficulty('medium')">Medium</button>
+            <button onclick="changeDifficulty('expert')">Expert</button>
         </div>
         <div class="game-card">
             <div class="info-container">
                 <div class="bombs-remaining">002</div>
-                <button class="smiley">😃</button>
+                <button class="smiley" onclick="initGame()">😃</button>
                 <div class="timer">000</div>
             </div>
             <div class="board-container">
@@ -35,7 +35,8 @@
 
     <script src="js/utils.js"></script>
     <script src="js/mine.js"></script>
-    <script src="js/script.js"></script>
+    <script src="js/cell.js"></script>
+    <script src="js/game.js"></script>
 </body>
 
 </html>
