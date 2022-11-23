@@ -8,19 +8,21 @@ const FLAG = "🚩";
 const SMILEY_LOSER = "😢";
 const SMILEY_WINNER = "🏆";
 
+const BEGINNER_MINES_AMOUNT = 2
+const MEDIUM_MINES_AMOUNT = 14
+const EXPERT_MINES_AMOUNT = 32
+
+const BEGINNER_SIZE = 4
+const MEDIUM_SIZE = 8
+const EXPERT_SIZE = 12
+
 var timerId;
 
 var gBoard;
-// var gBoard = {
-//     minesAroundCount: 4,
-//     isShown: false,
-//     isMine: false,
-//     isMarked: true
-// }
 
 var gLevel = {
-    SIZE: 4,
-    MINES: 2,
+    SIZE: BEGINNER_SIZE,
+    MINES: BEGINNER_MINES_AMOUNT,
 };
 
 var gGame = {

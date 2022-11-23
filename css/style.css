@@ -7,7 +7,7 @@
 }
 
 body {
-    background-color: #1d242f;
+    background-color: #191d25;
     color: white;
 }
 
@@ -16,7 +16,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 60vh;
+    height: 100%;
 }
 
 .container h1 {
@@ -24,14 +24,24 @@ body {
 }
 
 
+.game-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: #1d242f;
+    box-shadow: 0px 0px 6px 6px rgba(0, 0, 0, 0.2);
+}
+
 table {
     border-spacing: 6px;
 }
 
 td {
     background-color: #151a24;
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     border-radius: 6px;
     text-align: center;
     font-size: 1.2rem;
@@ -57,7 +67,8 @@ td {
 .info-container {
     display: flex;
     justify-content: space-between;
-    width: 260px;
+    min-width: 260px;
+    width: 100%;
     margin-bottom: 2rem;
 }
 
@@ -82,4 +93,22 @@ td {
 .info-container .smiley:active {
     box-shadow: inset -3px 3px rgba(0, 0, 0, 0.2), inset -2px 2px rgba(0, 0, 0, 0.2), inset -3px 3px rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.difficulty-container {
+    padding-bottom: 2rem;
+
+}
+
+.difficulty-container button {
+    padding: 0.5rem 1rem;
+    background: #151a24;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    width: 100px;
+
 }

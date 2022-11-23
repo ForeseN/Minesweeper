@@ -1,8 +1,5 @@
 'use strict'
 
-const BEGINNER_MINES_AMOUNT = 2
-const MEDIUM_MINES_AMOUNT = 14
-const EXPERT_MINES_AMOUNT = 32
 const gMines = []
 
 function setMinesNegsCount(board) {
