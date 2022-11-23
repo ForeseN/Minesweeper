@@ -398,6 +398,6 @@ function onUndo() {
     renderBoardCellByCell()
 }
 
-function onToggleTheme(){
+function onToggleTheme() {
     
 }

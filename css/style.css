@@ -1,22 +1,22 @@
 * {
     caret-color: transparent;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     font-weight: bold;
-    color: #EEE;
+    color: #eee;
 }
 
-
 body {
-    /* background-color: #191d25; */
     background: rgb(29, 36, 47);
-    background: linear-gradient(180deg, rgba(29, 36, 47, 1) 0%, rgba(11, 13, 15, 1) 63%);
+    background: linear-gradient(180deg,
+            rgba(29, 36, 47, 1) 0%,
+            rgba(11, 13, 15, 1) 63%);
     color: white;
     overflow: hidden;
     height: 100vh;
 }
 
-
+/* only mines are images but maybe I will add flags as well*/
 img {
     width: 17px;
     display: inline-block;
@@ -34,7 +34,6 @@ img {
     font-size: 2.3rem;
 }
 
-
 .game-card {
     display: flex;
     flex-direction: column;
@@ -46,11 +45,6 @@ img {
     border-radius: 10px;
 }
 
-/* .game-card .lives {
-    align-self: flex-start;
-    padding-bottom: 0.5rem;
-    font-size: 1.1rem;
-} */
 
 table {
     border-spacing: 6px;
@@ -64,27 +58,26 @@ td {
     text-align: center;
     font-size: 1.2rem;
     box-shadow: inset 0px 0px 3px 1px rgba(0, 0, 0, 0.2);
-
 }
 
 .unopened {
-    /* background: #3f61d3; */
     background: rgb(82, 116, 218);
-    background: linear-gradient(180deg, rgba(82, 116, 218, 1) 0%, rgba(54, 86, 177, 1) 46%);
+    background: linear-gradient(180deg,
+            rgba(82, 116, 218, 1) 0%,
+            rgba(54, 86, 177, 1) 46%);
     box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.2);
     cursor: pointer;
-
 }
 
 .marked {
-    /* background-color: #ecc457; */
     background: rgb(251, 223, 105);
-    background: linear-gradient(180deg, rgba(251, 223, 105, 1) 0%, rgba(237, 193, 60, 1) 46%);
+    background: linear-gradient(180deg,
+            rgba(251, 223, 105, 1) 0%,
+            rgba(237, 193, 60, 1) 46%);
 }
 
 .marked:after {
     content: "🚩";
-    /* font-size: 0.9rem; */
 }
 
 .info-container {
@@ -95,8 +88,7 @@ td {
     margin-bottom: 2rem;
 }
 
-.info-container div,
-.smiley {
+.info-container>* {
     background-color: #151a24;
     padding: 0.75rem 1.5rem;
     border-radius: 10px;
@@ -106,21 +98,36 @@ td {
 }
 
 .info-container .smiley {
-    box-shadow: -3px 3px rgba(0, 0, 0, 0.2), -2px 2px rgba(0, 0, 0, 0.2), -3px 3px rgba(0, 0, 0, 0.2);
+    box-shadow: -3px 3px rgba(0, 0, 0, 0.2), -2px 2px rgba(0, 0, 0, 0.2),
+        -3px 3px rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(0, 0, 0, 0.2);
     cursor: pointer;
     padding: 1rem;
     font-size: 1.5rem;
 }
 
+.btn {
+    box-shadow: -2px 2px rgba(0, 0, 0, 0.2), -2px 2px rgba(0, 0, 0, 0.2),
+        -2px 2px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.btn:active {
+    box-shadow: inset -3px 3px rgba(0, 0, 0, 0.5),
+        inset -2px 2px rgba(0, 0, 0, 0.5), inset -3px 3px rgba(0, 0, 0, 0.5),
+        inset 0px 0px 1px 3px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
 .info-container .smiley:active {
-    box-shadow: inset -3px 3px rgba(0, 0, 0, 0.2), inset -2px 2px rgba(0, 0, 0, 0.2), inset -3px 3px rgba(0, 0, 0, 0.2);
+    box-shadow: inset -3px 3px rgba(0, 0, 0, 0.2),
+        inset -2px 2px rgba(0, 0, 0, 0.2), inset -3px 3px rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .difficulty-container {
     padding-bottom: 2rem;
-
 }
 
 .difficulty-container button {
@@ -133,12 +140,14 @@ td {
     margin-left: 1rem;
     margin-right: 1rem;
     width: 100px;
-    box-shadow: -2px 2px rgba(0, 0, 0, 0.2), -2px 2px rgba(0, 0, 0, 0.2), -2px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: -3px 3px rgba(0, 0, 0, 0.2), -2px 2px rgba(0, 0, 0, 0.2),
+        -3px 3px rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .difficulty-container button:active {
-    box-shadow: inset -3px 3px rgba(0, 0, 0, 0.2), inset -2px 2px rgba(0, 0, 0, 0.2), inset -3px 3px rgba(0, 0, 0, 0.2);
+    box-shadow: inset -3px 3px rgba(0, 0, 0, 0.2),
+        inset -2px 2px rgba(0, 0, 0, 0.2), inset -3px 3px rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
@@ -177,7 +186,8 @@ td {
 .utilities button {
     color: white;
     background-color: #1d242f;
-    box-shadow: -2px 2px rgba(0, 0, 0, 0.2), -2px 2px rgba(0, 0, 0, 0.2), -2px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: -2px 2px rgba(0, 0, 0, 0.2), -2px 2px rgba(0, 0, 0, 0.2),
+        -2px 2px rgba(0, 0, 0, 0.2);
     border: 1px solid black;
     padding: 1.1rem 1.1rem;
     font-size: 1.3rem;
@@ -191,18 +201,17 @@ td {
 }
 
 .utilities button:not([disabled]):active {
-    box-shadow: inset -3px 3px rgba(0, 0, 0, 0.5), inset -2px 2px rgba(0, 0, 0, 0.5), inset -3px 3px rgba(0, 0, 0, 0.5);
+    box-shadow: inset -3px 3px rgba(0, 0, 0, 0.5),
+        inset -2px 2px rgba(0, 0, 0, 0.5), inset -3px 3px rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(0, 0, 0, 0.2);
-
 }
 
 .utilities button.hold:focus {
-    box-shadow: inset -3px 3px rgba(0, 0, 0, 0.5), inset -2px 2px rgba(0, 0, 0, 0.5), inset -3px 3px rgba(0, 0, 0, 0.5), inset 0px 0px 1px 3px rgba(0, 0, 0, 0.5);
+    box-shadow: inset -3px 3px rgba(0, 0, 0, 0.5),
+        inset -2px 2px rgba(0, 0, 0, 0.5), inset -3px 3px rgba(0, 0, 0, 0.5),
+        inset 0px 0px 1px 3px rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(0, 0, 0, 0.2);
-
-
 }
-
 
 .game-container {
     display: flex;
@@ -242,6 +251,28 @@ td {
 }
 
 /* LIGHT MODE!!! */
-.game-card {
-    /* background: white; */
+/* .game-card,
+.utilities button {
+    background: #031521;
 }
+
+.info-container button,
+.difficulty-container button,
+.info-container div,
+.info-container-2 div {
+    background: #072234;
+}
+
+.unopened {
+    background: rgb(45, 208, 244);
+    background: linear-gradient(180deg, rgba(45, 208, 244, 1) 0%, rgba(9, 128, 161, 1) 62%);
+}
+
+.opened {
+    background-color: #07283d;
+}
+
+.light {
+    background: rgb(9, 60, 94);
+    background: linear-gradient(180deg, rgba(9, 60, 94, 1) 0%, rgba(6, 27, 41, 1) 62%);
+} */
