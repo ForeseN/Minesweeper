@@ -22,6 +22,7 @@ function onCellClickedLeft(i, j) {
     if (clickedCell.isMine) {
         // Clicked on Mine
         gGame.lives--
+        renderLives()
         if (gGame.lives === 0) {
             // LOST
             announceLose(i, j)

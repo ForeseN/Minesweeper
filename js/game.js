@@ -6,6 +6,7 @@
 // const MINE = "💣"
 const MINE = '<img src="img/mine3.png" alt="">'
 const FLAG = "🚩"
+const LIFE = "❤️"
 const SMILEY_LOSER = "😢"
 const SMILEY_WINNER = "🏆"
 const SMILEY_REGULAR = "😃"
@@ -55,6 +56,7 @@ function clearSlate() {
     elBombsRemain.innerText = formatCounters(gLevel.MINES)
     document.querySelector(".container .timer").innerText = "000"
     document.querySelector(".smiley").innerText = SMILEY_REGULAR
+    document.querySelector(".lives").innerText = `${LIFE}${LIFE}${LIFE}`
 
     gGame = {
         isOn: false,
@@ -160,4 +162,27 @@ function changeDifficulty(difficulty) {
             console.log("Change difficulty is bugged!")
     }
     initGame()
+}
+
+function renderLives() {
+    const elLives = document.querySelector(".lives")
+    console.log(gGame.lives)
+    switch (gGame.lives) {
+        case 3:
+            elLives.innerText = `${LIFE}${LIFE}${LIFE}`
+            break
+        case 2:
+            elLives.innerText = `${LIFE}${LIFE}`
+            break
+        case 1:
+            elLives.innerText = `${LIFE}`
+            break
+        case 0:
+            elLives.innerText = ``
+            break
+
+        default:
+            console.log("Problem with renderLives!")
+            break
+    }
 }
