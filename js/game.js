@@ -166,7 +166,6 @@ function changeDifficulty(difficulty) {
 
 function renderLives() {
     const elLives = document.querySelector(".lives")
-    console.log(gGame.lives)
     switch (gGame.lives) {
         case 3:
             elLives.innerText = `${LIFE}${LIFE}${LIFE}`
