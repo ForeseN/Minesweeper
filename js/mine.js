@@ -1,6 +1,6 @@
 "use strict"
 
-const gMines = []
+var gMines = []
 
 function setMinesNegsCount(board) {
     for (let i = 0; i < board.length; i++) {
@@ -29,7 +29,6 @@ function getMineNegsCount(board, rowIdx, colIdx) {
 function setRandomMines(i, j) {
     const emptyCells = findEmptyCells()
     removeNeighbors(i, j, emptyCells)
-    console.log(emptyCells)
     for (let i = 0; i < gLevel.MINES; i++) {
         const randomIndex = getRandomIntInclusive(0, emptyCells.length - 1)
         const emptyCell = emptyCells[randomIndex]

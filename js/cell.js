@@ -21,7 +21,13 @@ function onCellClickedLeft(i, j) {
     renderCell(i, j)
     if (clickedCell.isMine) {
         // Clicked on Mine
-        announceLose(i, j)
+        gGame.lives--
+        if (gGame.lives === 0) {
+            // LOST
+            announceLose(i, j)
+        } else {
+            // KEEP PLAYING
+        }
     } else {
         // Clicked on Number
         if (clickedCell.minesAroundCount > 0) {
@@ -68,7 +74,12 @@ function openNearbyCells(rowIdx, colIdx) {
 
 function onCellClickedRight(i, j) {
     if (!gGame.isOn) return
-    if (!timerId) startTimer()
+    if (!timerId) {
+        // Game init
+        setRandomMines(i, j)
+        setMinesNegsCount(gBoard)
+        startTimer()
+    }
 
     const cell = gBoard[i][j]
     if (cell.isShown) return

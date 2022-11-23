@@ -33,6 +33,7 @@ var gGame = {
     shownCount: 0,
     markedCount: 0,
     secsPassed: 0,
+    lives: 3,
 }
 
 function initGame() {
@@ -45,8 +46,8 @@ function initGame() {
     // setRandomMines()
     renderBoard(gBoard, ".board-container")
     // setMinesNegsCount(gBoard)
-    gGame.isOn = true
     clearSlate()
+    gGame.isOn = true
 }
 
 function clearSlate() {
@@ -54,6 +55,16 @@ function clearSlate() {
     elBombsRemain.innerText = formatCounters(gLevel.MINES)
     document.querySelector(".container .timer").innerText = "000"
     document.querySelector(".smiley").innerText = SMILEY_REGULAR
+
+    gGame = {
+        isOn: false,
+        shownCount: 0,
+        markedCount: 0,
+        secsPassed: 0,
+        lives: 3,
+    }
+
+    gMines = []
 }
 
 function buildBoard() {
