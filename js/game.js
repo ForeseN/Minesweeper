@@ -35,6 +35,7 @@ var gGame = {
     markedCount: 0,
     secsPassed: 0,
     lives: 3,
+    isHint: false,
 }
 
 function initGame() {
@@ -64,6 +65,8 @@ function clearSlate() {
         markedCount: 0,
         secsPassed: 0,
         lives: 3,
+        isHint: false,
+        hints: 3,
     }
 
     gMines = []
@@ -113,7 +116,7 @@ function announceLose(i, j) {
     elCell.style.backgroundColor = "red"
     for (let i = 0; i < gMines.length; i++) {
         const currMine = gMines[i]
-        renderCell(currMine.i, currMine.j)
+        openCell(currMine.i, currMine.j)
     }
     clearInterval(timerId)
     gGame.isOn = false
@@ -184,4 +187,60 @@ function renderLives() {
             console.log("Problem with renderLives!")
             break
     }
+}
+
+function onHint() {
+    if (gGame.hints > 0) gGame.isHint = true
+}
+
+function useHint(rowIdx, colIdx) {
+    gGame.hints--
+    const hideAfterHintCells = []
+    for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
+        if (i < 0 || i >= gBoard.length) continue
+        for (var j = colIdx - 1; j <= colIdx + 1; j++) {
+            if (j < 0 || j >= gBoard[0].length) continue
+            const currCell = gBoard[i][j]
+            if (currCell.isShown) continue
+
+            // show cell for hint
+            currCell.isShown = true
+            openCell(i, j)
+            hideAfterHintCells.push({ i, j })
+        }
+    }
+    setTimeout(() => {
+        hideCells(hideAfterHintCells)
+        if (gGame.hints === 0) {
+            // DISABLE BUTTON (Here for smoothness of gameplay)
+            document.querySelector(".hint").disabled = true
+        }
+    }, 1000)
+    gGame.isHint = false
+}
+
+function hideCells(cells) {
+    for (let i = 0; i < cells.length; i++) {
+        const currCell = cells[i]
+        hideCell(currCell.i, currCell.j)
+    }
+    console.log(gBoard)
+}
+
+function hideCell(i, j) {
+    const cell = gBoard[i][j]
+    cell.isShown = false
+    const elCell = document.querySelector(`.cell-${i}-${j}`)
+    elCell.classList.add("unopened")
+    elCell.innerText = ""
+}
+
+function openCell(i, j) {
+    // Select the elCell and set the value
+    const cell = gBoard[i][j]
+    cell.isShown = true
+    const elCell = document.querySelector(`.cell-${i}-${j}`)
+    elCell.classList.remove("unopened")
+    elCell.classList.remove("marked") // Removing mark just in case
+    elCell.innerHTML = getCellValue(cell)
 }

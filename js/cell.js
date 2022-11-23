@@ -15,10 +15,15 @@ function onCellClickedLeft(i, j) {
         startTimer()
     }
 
+    if (gGame.isHint) {
+        useHint(i, j)
+        return
+    }
+
     const clickedCell = gBoard[i][j]
     if (clickedCell.isMarked || clickedCell.isShown) return
     clickedCell.isShown = true
-    renderCell(i, j)
+    openCell(i, j)
     if (clickedCell.isMine) {
         // Clicked on Mine
         gGame.lives--
@@ -43,7 +48,7 @@ function onCellClickedLeft(i, j) {
     if (checkWin()) announceWin()
 }
 
-function renderCell(i, j) {
+function openCell(i, j) {
     // Select the elCell and set the value
     const cell = gBoard[i][j]
     const elCell = document.querySelector(`.cell-${i}-${j}`)
@@ -67,7 +72,7 @@ function openNearbyCells(rowIdx, colIdx) {
                     openNearbyCells(i, j)
                 }
                 currCell.isShown = true
-                renderCell(i, j)
+                openCell(i, j)
             }
         }
     }
