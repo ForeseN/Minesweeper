@@ -5,31 +5,32 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/util.css">
     <link rel="stylesheet" href="css/style.css">
     <title>Minesweeper</title>
 </head>
 
-<body class="light" onload="initGame()" oncontextmenu="return false;">
+<body onload="initGame()" oncontextmenu="return false;">
 
     <div class="container">
         <h1>Minesweeper</h1>
         <div class="difficulty-container">
-            <button onclick="changeDifficulty('beginner')">Beginner</button>
-            <button onclick="changeDifficulty('medium')">Medium</button>
-            <button onclick="changeDifficulty('expert')">Expert</button>
+            <button class="btn" onclick="changeDifficulty('beginner')">Beginner</button>
+            <button class="btn" onclick="changeDifficulty('medium')">Medium</button>
+            <button class="btn" onclick="changeDifficulty('expert')">Expert</button>
         </div>
         <div class="game-container">
             <div class="utilities">
-                <button class="hint hold" onclick="onHint()">💡</button>
-                <button class="safe-click" onclick="onSafeClick()">🛡️</button>
-                <button class="kill-mines" onclick="onKillMines()">💀</button>
-                <button class="mega-hint" onclick="onMegaHint()">🙏</button>
+                <button class="hint hold btn" onclick="onHint()">💡</button>
+                <button class="safe-click btn" onclick="onSafeClick()">🛡️</button>
+                <button class="kill-mines btn" onclick="onKillMines()">💀</button>
+                <button class="mega-hint btn" onclick="onMegaHint()">🙏</button>
             </div>
             <div class="game-card">
 
                 <div class="info-container">
                     <div class="bombs-remaining">002</div>
-                    <button class="smiley" onclick="initGame()">😃</button>
+                    <button class="smiley btn" onclick="initGame()">😃</button>
                     <div class="timer">000</div>
                 </div>
                 <div class="board-container">
@@ -41,10 +42,10 @@
                 </div>
             </div>
             <div class="utilities">
-                <button class="seven-boom" onclick="onSevenBoom()">7</button>
-                <button class="sandbox" onclick="onSandbox()">🕹️</button>
-                <button class="undo" onclick="onUndo()">⏪</button>
-                <button onclick="onToggleTheme()">☀️</button>
+                <button class="seven-boom btn" onclick="onSevenBoom()">7</button>
+                <button class="sandbox btn" onclick="onSandbox()">🕹️</button>
+                <button class="undo btn" onclick="onUndo()">⏪</button>
+                <button class="toggle-theme btn" onclick="onToggleTheme()">☀️</button>
             </div>
         </div>
         <div class="footer">Developed & Designed by Yaron Shapira</div>

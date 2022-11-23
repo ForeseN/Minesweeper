@@ -10,6 +10,8 @@ const LIFE = "❤️"
 const SMILEY_LOSER = "😢"
 const SMILEY_WINNER = "🏆"
 const SMILEY_REGULAR = "😃"
+const DARK_THEME = "🌙"
+const LIGHT_THEME = "☀️"
 
 const BEGINNER_MINES_AMOUNT = 2
 const MEDIUM_MINES_AMOUNT = 14
@@ -29,6 +31,8 @@ var killMinesTimeoutId
 
 var gBoard
 var gBoardMoves = []
+
+var isDark = true
 
 var gLevel = {
     SIZE: MEDIUM_SIZE,
@@ -399,5 +403,39 @@ function onUndo() {
 }
 
 function onToggleTheme() {
-    
+    const elToggleBtn = document.querySelector(".utilities .toggle-theme")
+    if (elToggleBtn.innerText === LIGHT_THEME) {
+        elToggleBtn.innerText = DARK_THEME
+    } else {
+        elToggleBtn.innerText = LIGHT_THEME
+    }
+
+    document.querySelector("body").classList.toggle("light")
+    document.querySelector("h1").classList.toggle("text-black")
+    document.querySelector(".footer").classList.toggle("text-black")
+    document.querySelector(".game-card").classList.toggle("light")
+    var btns = document.querySelectorAll(".utilities button")
+    for (let i = 0; i < btns.length; i++) {
+        btns[i].classList.toggle("light")
+    }
+    var unopenedElements = document.querySelectorAll(".unopened")
+    for (let i = 0; i < unopenedElements.length; i++) {
+        unopenedElements[i].classList.toggle("light")
+    }
+    var openedElements = document.querySelectorAll(".opened")
+    for (let i = 0; i < openedElements.length; i++) {
+        openedElements[i].classList.toggle("light")
+    }
+    btns = document.querySelectorAll(".difficulty-container button")
+    for (let i = 0; i < btns.length; i++) {
+        btns[i].classList.toggle("light")
+    }
+    var misc = document.querySelectorAll(".info-container >*")
+    for (let i = 0; i < misc.length; i++) {
+        misc[i].classList.toggle("light")
+    }
+    misc = document.querySelectorAll(".info-container-2 >*")
+    for (let i = 0; i < misc.length; i++) {
+        misc[i].classList.toggle("light")
+    }
 }

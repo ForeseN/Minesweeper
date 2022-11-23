@@ -98,32 +98,8 @@ td {
 }
 
 .info-container .smiley {
-    box-shadow: -3px 3px rgba(0, 0, 0, 0.2), -2px 2px rgba(0, 0, 0, 0.2),
-        -3px 3px rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    cursor: pointer;
     padding: 1rem;
     font-size: 1.5rem;
-}
-
-.btn {
-    box-shadow: -2px 2px rgba(0, 0, 0, 0.2), -2px 2px rgba(0, 0, 0, 0.2),
-        -2px 2px rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-}
-
-.btn:active {
-    box-shadow: inset -3px 3px rgba(0, 0, 0, 0.5),
-        inset -2px 2px rgba(0, 0, 0, 0.5), inset -3px 3px rgba(0, 0, 0, 0.5),
-        inset 0px 0px 1px 3px rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-}
-
-.info-container .smiley:active {
-    box-shadow: inset -3px 3px rgba(0, 0, 0, 0.2),
-        inset -2px 2px rgba(0, 0, 0, 0.2), inset -3px 3px rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .difficulty-container {
@@ -133,23 +109,13 @@ td {
 .difficulty-container button {
     padding: 0.5rem 1rem;
     background: #151a24;
-    border: none;
     border-radius: 5px;
-    cursor: pointer;
-    outline: none;
     margin-left: 1rem;
     margin-right: 1rem;
     width: 100px;
-    box-shadow: -3px 3px rgba(0, 0, 0, 0.2), -2px 2px rgba(0, 0, 0, 0.2),
-        -3px 3px rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-.difficulty-container button:active {
-    box-shadow: inset -3px 3px rgba(0, 0, 0, 0.2),
-        inset -2px 2px rgba(0, 0, 0, 0.2), inset -3px 3px rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-}
 
 .footer {
     padding-top: 2rem;
@@ -163,7 +129,7 @@ td {
     padding-top: 1rem;
 }
 
-.info-container-2 div {
+.info-container-2>* {
     background-color: #151a24;
     padding: 0.75rem 1rem;
     border-radius: 10px;
@@ -186,41 +152,21 @@ td {
 .utilities button {
     color: white;
     background-color: #1d242f;
-    box-shadow: -2px 2px rgba(0, 0, 0, 0.2), -2px 2px rgba(0, 0, 0, 0.2),
-        -2px 2px rgba(0, 0, 0, 0.2);
     border: 1px solid black;
     padding: 1.1rem 1.1rem;
     font-size: 1.3rem;
     margin: 0.7rem 0rem;
     border-radius: 10px;
     outline: none;
-    cursor: pointer;
     margin-bottom: 10px;
     height: 70px;
     width: 70px;
-}
-
-.utilities button:not([disabled]):active {
-    box-shadow: inset -3px 3px rgba(0, 0, 0, 0.5),
-        inset -2px 2px rgba(0, 0, 0, 0.5), inset -3px 3px rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-}
-
-.utilities button.hold:focus {
-    box-shadow: inset -3px 3px rgba(0, 0, 0, 0.5),
-        inset -2px 2px rgba(0, 0, 0, 0.5), inset -3px 3px rgba(0, 0, 0, 0.5),
-        inset 0px 0px 1px 3px rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .game-container {
     display: flex;
 }
 
-.utilities button:disabled {
-    background-color: rgb(49, 49, 52);
-    cursor: auto;
-}
 
 .safe {
     animation: opacityChange 0.5s infinite alternate;
@@ -251,9 +197,55 @@ td {
 }
 
 /* LIGHT MODE!!! */
+.light {
+    background: rgb(198, 198, 198);
+    background: radial-gradient(circle, rgba(198, 198, 198, 1) 0%, rgba(94, 94, 94, 1) 61%);
+}
+
+
+.text-black {
+    color: black;
+}
+
+.game-card.light,
+.utilities button.light {
+    background: rgb(87, 87, 96);
+    color: black;
+}
+
+
+.info-container button.light,
+.difficulty-container button.light,
+.info-container div.light,
+.info-container-2 div.light {
+    background: rgb(198, 198, 198);
+    color: black;
+}
+
+.unopened.light {
+    background: rgb(126, 212, 255);
+    background: radial-gradient(circle, rgba(126, 212, 255, 1) 0%, rgba(61, 150, 255, 1) 60%);
+
+}
+
+.opened.light {
+    background: #eaeaea;
+    color: black;
+}
+
+
+.marked {
+    background: rgb(251, 223, 105);
+    background: linear-gradient(180deg,
+            rgba(251, 223, 105, 1) 0%,
+            rgba(237, 193, 60, 1) 46%);
+}
+
+
+
 /* .game-card,
 .utilities button {
-    background: #031521;
+    background: #011623;
 }
 
 .info-container button,
@@ -264,15 +256,13 @@ td {
 }
 
 .unopened {
-    background: rgb(45, 208, 244);
-    background: linear-gradient(180deg, rgba(45, 208, 244, 1) 0%, rgba(9, 128, 161, 1) 62%);
+    background: #23c8ec;
 }
 
 .opened {
-    background-color: #07283d;
+    background-color: #07273a;
 }
 
 .light {
-    background: rgb(9, 60, 94);
-    background: linear-gradient(180deg, rgba(9, 60, 94, 1) 0%, rgba(6, 27, 41, 1) 62%);
+    background: #1c4967;
 } */
