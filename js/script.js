@@ -21,8 +21,8 @@ var timerId;
 var gBoard;
 
 var gLevel = {
-    SIZE: BEGINNER_SIZE,
-    MINES: BEGINNER_MINES_AMOUNT,
+    SIZE: EXPERT_SIZE,
+    MINES: EXPERT_MINES_AMOUNT,
 };
 
 var gGame = {
@@ -52,6 +52,7 @@ function buildBoard() {
                 isShown: false,
                 isMine: false,
                 isMarked: false,
+                isOpened: false
             };
         }
     }
@@ -100,21 +101,22 @@ function renderCell(i, j) {
 }
 
 function openNearbyCells(rowIdx, colIdx) {
+    gBoard[rowIdx][colIdx].isOpened = true;
     for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
         if (i < 0 || i >= gBoard.length) continue;
         for (var j = colIdx - 1; j <= colIdx + 1; j++) {
             if (i === rowIdx && j === colIdx) continue;
             if (j < 0 || j >= gBoard[0].length) continue;
             const currCell = gBoard[i][j];
-            const elCurrCell = document.querySelector(`.cell-${i}-${j}`);
-            if (!currCell.isMine && !elCurrCell.classList.contains("marked")) {
+            // if (!currCell.isMine && !elCurrCell.classList.contains("marked")) {
+            if (!currCell.isMine && !currCell.isMarked) {
                 // OPEN
+                if (currCell.minesAroundCount === 0 && !currCell.isOpened) {
+                    openNearbyCells(i, j)
+                }
                 currCell.isShown = true;
                 renderCell(i, j);
             }
-            // if (currCell.minesAroundCount === 0) {
-            //     openNearbyCells(i, j)
-            // }
         }
     }
 }
