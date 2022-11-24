@@ -241,9 +241,7 @@ async function rollOutBoard() {
     cellElements = Array.from(cellElements).sort(() => Math.random() - 0.5);
     for (var i = 0; i < cellElements.length; i++) {
         const currCell = cellElements[i]
-        console.log('YES')
         if (Math.random() > 0.4) {
-            console.log('EVEN MORE YES')
             currCell.classList.add("roll-out-bottom")
         }
         await timer(25); // then the created Promise can be awaited
