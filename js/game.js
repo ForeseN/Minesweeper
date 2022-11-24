@@ -329,13 +329,13 @@ async function throwConfetti() {
     getRandomColor()
     for (let i = 0; i < 400; i++) {
         var confetti = document.createElement("div");
-        const width = getRandomIntInclusive(1, 8)
+        const width = getRandomIntInclusive(1, 30)
         confetti.style.width = `${width} px`
         confetti.style.height = `${width * 0.4}px`
         confetti.style.backgroundColor = getRandomColor()
         confetti.style.top = `-10%`
         confetti.style.transform = `rotate(${getRandomIntInclusive(0, 360)}deg)`
-        confetti.style.left = `${getRandomIntInclusive(1, 80)}vw`
+        confetti.style.left = `${getRandomIntInclusive(1, 90)}vw`
         // confetti.style.left = getRandomIntInclusive(0, 100)
         confetti.classList.add("confetti")
         elConfettiWrapper.append(confetti)
