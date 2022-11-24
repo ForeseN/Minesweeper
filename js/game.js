@@ -42,6 +42,7 @@ var isDark = true
 var gLevel = {
     SIZE: MEDIUM_SIZE,
     MINES: MEDIUM_MINES_AMOUNT,
+    DIFFICULTY: 'medium'
 }
 
 var megaHintFirstLoc
@@ -176,45 +177,21 @@ function checkWin() {
 
 function setHighScore() {
     const elHighScore = document.querySelector('.info-container-2 .high-score')
-    if (gLevel.SIZE === BEGINNER_SIZE) {
-        elHighScore.innerText = formatCounters(localStorage.getItem("beginnerHighScore"));
-    }
-    if (gLevel.SIZE === MEDIUM_SIZE) {
-        elHighScore.innerText = formatCounters(localStorage.getItem("mediumHighScore"));
-    }
-    if (gLevel.SIZE === EXPERT_SIZE) {
-        elHighScore.innerText = formatCounters(localStorage.getItem("expertHighScore"));
-    }
-    // console.log(localStorage.getItem("beginnerHighScore"))
+    elHighScore.innerText = formatCounters(localStorage.getItem(`${gLevel.DIFFICULTY}HighScore`))
 }
 
 function updateStorageHighScore() {
     if (typeof (Storage) === "undefined") return
     const score = gGame.secsPassed
-    if (gLevel.SIZE === BEGINNER_SIZE) {
-        const lastHighScore = localStorage.getItem("beginnerHighScore");
-        if (lastHighScore > score || lastHighScore == null) {
-            localStorage.setItem("beginnerHighScore", score);
-        }
-    }
-    if (gLevel.SIZE === MEDIUM_SIZE) {
-        const lastHighScore = localStorage.getItem("mediumHighScore");
-        if (lastHighScore > score || lastHighScore == null) {
-            localStorage.setItem("mediumHighScore", score);
-        }
-    }
-    if (gLevel.SIZE === EXPERT_SIZE) {
-        const lastHighScore = localStorage.getItem("expertHighScore");
-        if (lastHighScore > score || lastHighScore == null) {
-            localStorage.setItem("expertHighScore", score);
-        }
+
+    const lastHighScore = localStorage.getItem(`${gLevel.DIFFICULTY}HighScore`)
+    if (lastHighScore > score || lastHighScore == null) {
+        localStorage.setItem(`${gLevel.DIFFICULTY}HighScore`, score)
     }
     setHighScore()
-
 }
 
 function announceWin() {
-    // console.log(localStorage.getItem("beginnerHighScore"))
     const elSmiley = document.querySelector(".smiley")
     elSmiley.innerText = SMILEY_WINNER
     clearInterval(timerId)
@@ -276,14 +253,17 @@ function changeDifficulty(difficulty) {
         case "beginner":
             gLevel.MINES = BEGINNER_MINES_AMOUNT
             gLevel.SIZE = BEGINNER_SIZE
+            gLevel.DIFFICULTY = 'beginner'
             break
         case "medium":
             gLevel.MINES = MEDIUM_MINES_AMOUNT
             gLevel.SIZE = MEDIUM_SIZE
+            gLevel.DIFFICULTY = 'medium'
             break
         case "expert":
             gLevel.MINES = EXPERT_MINES_AMOUNT
             gLevel.SIZE = EXPERT_SIZE
+            gLevel.DIFFICULTY = 'expert'
             break
 
         default:
