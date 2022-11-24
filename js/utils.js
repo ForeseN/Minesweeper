@@ -97,3 +97,40 @@ function renderBoardCellByCell() {
 function getCellElement(i, j) {
     return document.querySelector(`.cell-${i}-${j}`)
 }
+
+// if param is 1 then we send the location of each neighbor
+// else we send the actual cell
+function getNeighborsInclusive(rowIdx, colIdx, param = 0) {
+    const neighbors = []
+    for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
+        if (i < 0 || i >= gBoard.length) continue
+        for (var j = colIdx - 1; j <= colIdx + 1; j++) {
+            if (j < 0 || j >= gBoard[0].length) continue
+            if (param === 1) {
+                neighbors.push({ i, j })
+            } else {
+                neighbors.push(gBoard[i][j])
+            }
+        }
+    }
+    return neighbors
+}
+
+// if param is 1 then we send the location of each neighbor
+// else we send the actual cell
+function getNeighborsExclusive(rowIdx, colIdx, param = 0) {
+    const neighbors = []
+    for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
+        if (i < 0 || i >= gBoard.length) continue
+        for (var j = colIdx - 1; j <= colIdx + 1; j++) {
+            if (i === rowIdx && j === colIdx) continue
+            if (j < 0 || j >= gBoard[0].length) continue
+            if (param === 1) {
+                neighbors.push({ i, j })
+            } else {
+                neighbors.push(gBoard[i][j])
+            }
+        }
+    }
+    return neighbors
+}

@@ -52,8 +52,10 @@ table {
 
 td {
     background-color: #151a24;
+    min-width: 31px;
     width: 31px;
     height: 31px;
+    min-height: 31px;
     border-radius: 6px;
     text-align: center;
     font-size: 1.2rem;

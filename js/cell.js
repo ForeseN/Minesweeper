@@ -8,21 +8,27 @@ function getCellValue(cell) {
     return value
 }
 
+function handleSandbox(i, j) {
+    if (gBoard[i][j].isMine) gLevel.MINES--
+    else gLevel.MINES++
+    gBoard[i][j].isMine = !gBoard[i][j].isMine
+    openCell(i, j)
+    const elBombsRemain = document.querySelector(".bombs-remaining")
+    elBombsRemain.innerText = formatCounters(gLevel.MINES)
+}
+
 function onCellClickedLeft(i, j) {
     if (!gGame.isOn) return
+
     if (gGame.isSandboxNow) {
-        if (gBoard[i][j].isMine) gLevel.MINES--
-        else gLevel.MINES++
-        gBoard[i][j].isMine = !gBoard[i][j].isMine
-        openCell(i, j)
-        const elBombsRemain = document.querySelector(".bombs-remaining")
-        elBombsRemain.innerText = formatCounters(gLevel.MINES)
+        handleSandbox(i, j)
         return
     }
+
     if (!timerId) {
         // Game init
         if (!gGame.isSevenBoom && !gGame.isBuiltBySandbox) {
-            // Sevenboom does it automatically
+            // Sevenboom & sandbox are already prepared
             setRandomMines(i, j)
             setMinesNegsCount(gBoard)
         }
@@ -42,34 +48,38 @@ function onCellClickedLeft(i, j) {
 
     const clickedCell = gBoard[i][j]
     if (clickedCell.isMarked || clickedCell.isShown) return
+
     clickedCell.isShown = true
     openCell(i, j)
-    if (clickedCell.isMine) {
-        // Clicked on Mine
-        const elCell = getCellElement(i, j)
-        elCell.style.backgroundColor = "red"
-        gGame.lives--
-        gGame.markedCount++
-        updateUI()
-        if (gGame.lives === 0) {
-            // LOST
-            announceLose(i, j)
-        } else {
-            // KEEP PLAYING
-        }
-    } else {
-        // Clicked on Number
-        if (clickedCell.minesAroundCount > 0) {
-            clickedCell.isOpened = true
-            clickedCell.isShown = true
-        } else {
-            // Clicked on Empty
-            openNearbyCells(i, j)
-        }
-    }
+
+    if (clickedCell.isMine) handleMine(i, j)
+    else handleEmpty(i, j)
+
     gBoardMoves.push(deepCopyMatrix(gBoard))
-    console.log(gBoardMoves)
+
     if (checkWin()) announceWin()
+}
+
+function handleEmpty(i, j) {
+    const clickedCell = gBoard[i][j]
+
+    if (clickedCell.minesAroundCount > 0) {
+        // Clicked on Number
+        clickedCell.isOpened = true
+        clickedCell.isShown = true
+    } else {
+        // Clicked on Empty
+        openNearbyCells(i, j)
+    }
+}
+
+function handleMine(i, j) {
+    const elCell = getCellElement(i, j)
+    elCell.style.backgroundColor = "red"
+    gGame.lives--
+    gGame.markedCount++
+    updateUI()
+    if (gGame.lives === 0) announceLose(i, j)
 }
 
 function openCell(i, j) {
@@ -86,21 +96,17 @@ function openCell(i, j) {
 
 function openNearbyCells(rowIdx, colIdx) {
     gBoard[rowIdx][colIdx].isOpened = true
-    for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
-        if (i < 0 || i >= gBoard.length) continue
-        for (var j = colIdx - 1; j <= colIdx + 1; j++) {
-            if (i === rowIdx && j === colIdx) continue
-            if (j < 0 || j >= gBoard[0].length) continue
-            const currCell = gBoard[i][j]
-            // if (!currCell.isMine && !elCurrCell.classList.contains("marked")) {
-            if (!currCell.isMine && !currCell.isMarked) {
-                // OPEN
-                if (currCell.minesAroundCount === 0 && !currCell.isOpened) {
-                    openNearbyCells(i, j)
-                }
-                currCell.isShown = true
-                openCell(i, j)
+    const neighbors = getNeighborsExclusive(rowIdx, colIdx, 1)
+    for (let i = 0; i < neighbors.length; i++) {
+        const neighborLoc = neighbors[i]
+        const currCell = gBoard[neighborLoc.i][neighborLoc.j]
+        if (!currCell.isMine && !currCell.isMarked) {
+            // OPEN
+            if (currCell.minesAroundCount === 0 && !currCell.isOpened) {
+                openNearbyCells(neighborLoc.i, neighborLoc.j)
             }
+            currCell.isShown = true
+            openCell(neighborLoc.i, neighborLoc.j)
         }
     }
 }
@@ -117,8 +123,14 @@ function onCellClickedRight(i, j) {
     const cell = gBoard[i][j]
     if (cell.isShown) return
 
+    handleMark(i, j)
+    updateUI()
+
+    if (checkWin()) announceWin()
+}
+
+function handleMark(i, j) {
     const elCell = getCellElement(i, j)
-    cell.isMarked = true
     if (elCell.classList.contains("marked")) {
         gBoard[i][j].isMarked = false
         gGame.markedCount--
@@ -128,10 +140,6 @@ function onCellClickedRight(i, j) {
         gGame.markedCount++
         elCell.classList.add("marked")
     }
-
-    updateUI()
-
-    if (checkWin()) announceWin()
 }
 
 function hideCells(cells) {
@@ -151,7 +159,6 @@ function hideCell(i, j) {
 }
 
 // TODO
-// 1. Fix light mode bugs when using 7boom or sandbox
 // 2. clean CSS & HTML
 // 3. Go over JS and see what can we fix
 // 4. Add specials js folder to keep things organized

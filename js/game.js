@@ -213,19 +213,17 @@ function onHint() {
 function useHint(rowIdx, colIdx) {
     gGame.hints--
     const hideAfterHintCells = []
-    for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
-        if (i < 0 || i >= gBoard.length) continue
-        for (var j = colIdx - 1; j <= colIdx + 1; j++) {
-            if (j < 0 || j >= gBoard[0].length) continue
-            const currCell = gBoard[i][j]
-            if (currCell.isShown) continue
-
-            // show cell for hint
-            currCell.isShown = true
-            openCell(i, j)
-            hideAfterHintCells.push({ i, j })
-        }
+    const neighbors = getNeighborsInclusive(rowIdx, colIdx, 1)
+    for (let i = 0; i < neighbors.length; i++) {
+        const neighborLoc = neighbors[i]
+        const currCell = gBoard[neighborLoc.i][neighborLoc.j]
+        if (currCell.isShown) continue
+        // show cell for hint
+        currCell.isShown = true
+        openCell(neighborLoc.i, neighborLoc.j)
+        hideAfterHintCells.push({ i: neighborLoc.i, j: neighborLoc.j })
     }
+
     hintTimeoutId = setTimeout(() => {
         hideCells(hideAfterHintCells)
         if (gGame.hints === 0) {
@@ -307,16 +305,14 @@ function getUnmarkedMines() {
 }
 
 function updateNeighbors(rowIdx, colIdx) {
-    for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
-        if (i < 0 || i >= gBoard.length) continue
-        for (var j = colIdx - 1; j <= colIdx + 1; j++) {
-            if (j < 0 || j >= gBoard[0].length) continue
-            const currCell = gBoard[i][j]
-            if (currCell.isMine || currCell.isMarked || !currCell.isShown) {
-                continue
-            }
-            openCell(i, j)
+    const neighbors = getNeighborsInclusive(rowIdx, colIdx, 1)
+    for (let i = 0; i < neighbors.length; i++) {
+        const neighborLoc = neighbors[i]
+        const currCell = gBoard[neighborLoc.i][neighborLoc.j]
+        if (currCell.isMine || currCell.isMarked || !currCell.isShown) {
+            continue
         }
+        openCell(neighborLoc.i, neighborLoc.j)
     }
 }
 

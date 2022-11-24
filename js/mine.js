@@ -13,17 +13,13 @@ function setMinesNegsCount(board) {
 
 function getMineNegsCount(board, rowIdx, colIdx) {
     var mines = 0
-    for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
-        if (i < 0 || i >= board.length) continue
-        for (var j = colIdx - 1; j <= colIdx + 1; j++) {
-            if (i === rowIdx && j === colIdx) continue
-            if (j < 0 || j >= board[0].length) continue
-            const currCell = board[i][j]
-            if (currCell.isMine) mines++
-        }
+    const neighbors = getNeighborsExclusive(rowIdx, colIdx)
+    for (let i = 0; i < neighbors.length; i++) {
+        if (neighbors[i].isMine) mines++
     }
     return mines
 }
+
 // gets i,j as a param to make sure it won't be a mine
 // on first time click
 function setRandomMines(i, j) {
