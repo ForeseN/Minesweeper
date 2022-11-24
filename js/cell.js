@@ -18,6 +18,7 @@ function handleSandbox(i, j) {
 }
 
 function onCellClickedLeft(i, j) {
+
     if (!gGame.isOn) return
 
     if (gGame.isSandboxNow) {
@@ -74,6 +75,10 @@ function handleEmpty(i, j) {
 }
 
 function handleMine(i, j) {
+    document.querySelector('.game-container').classList.add("shake")
+    setTimeout(() => {
+        document.querySelector('.game-container').classList.remove("shake")
+    }, 500)
     const elCell = getCellElement(i, j)
     elCell.style.backgroundColor = "red"
     gGame.lives--

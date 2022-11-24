@@ -55,6 +55,7 @@ function initGame() {
     }
     gBoard = buildBoard()
     renderBoard(gBoard, ".board-container")
+    clearSlate()
     gGame.isOn = true
 }
 
@@ -150,6 +151,10 @@ function announceLose(i, j) {
 const timer = ms => new Promise(res => setTimeout(res, ms))
 // We need to wrap the loop into an async function
 async function blowUpMines(gMines) {
+    const gameCard = document.querySelector(".game-container")
+    gameCard.classList.remove("shake")
+    gameCard.classList.add("ending-shake")
+    console.log(gameCard)
     isMinesBlowingUp = true
     for (var i = 0; i < gMines.length; i++) {
         const currMine = gMines[i]
@@ -157,6 +162,9 @@ async function blowUpMines(gMines) {
         blowUpMine(currMine.i, currMine.j)
         await timer(100); // then the created Promise can be awaited
     }
+    setTimeout(() => gameCard.classList.remove("ending-shake"), 500)
+
+    isMinesBlowingUp = false
 }
 function blowUpMine(i, j) {
     getCellElement(i, j).classList.add("kill")
