@@ -379,8 +379,10 @@ function onMegaHint() {
 function useMegaHint(i, j) {
     if (!megaHintFirstLoc) {
         megaHintFirstLoc = { i, j }
+        addHoverEvent()
         return // we need to choose another one
     }
+    removeHover()
     const megaHintSecondLoc = { i, j }
     for (let i = megaHintFirstLoc.i; i < megaHintSecondLoc.i + 1; i++) {
         for (let j = megaHintFirstLoc.j; j < megaHintSecondLoc.j + 1; j++) {
@@ -394,6 +396,12 @@ function useMegaHint(i, j) {
 
     document.querySelector(".mega-hint").disabled = true
     gGame.isMegaHint = false
+}
+
+function removeHover() {
+    const cellElements = document.querySelectorAll('.cell')
+    cellElements.forEach(elCell => elCell.classList.remove("hover"))
+    cellElements.forEach(elCell => elCell.removeEventListener("mouseover", hoverEvent))
 }
 
 function onSevenBoom() {

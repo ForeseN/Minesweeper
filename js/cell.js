@@ -165,6 +165,39 @@ function hideCell(i, j) {
     elCell.classList.remove("kill")
     elCell.innerText = ""
 }
+function addHoverEvent() {
+    if (!gGame.isMegaHint) return
+
+    const cellElements = document.querySelectorAll('.cell')
+    for (let i = 0; i < cellElements.length; i++) {
+        const cell = cellElements[i]
+        cell.addEventListener("mouseover", hoverEvent)
+    }
+}
+
+function hoverEvent(event) {
+    const elCell = event.srcElement
+    const tempCellIndex = elCell.classList[1].split("-")
+    const indexI = tempCellIndex[1]
+    const indexJ = tempCellIndex[2]
+    // console.log(indexI, indexJ)
+    showHover({ i: indexI, j: indexJ })
+}
+
+function showHover(location) {
+    if (!gGame.isMegaHint) return
+
+    const cellElements = document.querySelectorAll('.cell')
+    cellElements.forEach(elCell => elCell.classList.remove("hover"))
+
+    for (let i = megaHintFirstLoc.i; i <= location.i; i++) {
+        for (let j = megaHintFirstLoc.j; j <= location.j; j++) {
+            // console.log(i, j)
+            const elCell = getCellElement(i, j)
+            elCell.classList.add('hover')
+        }
+    }
+}
 
 // TODO
 // 2. clean CSS & HTML
