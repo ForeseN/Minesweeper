@@ -18,7 +18,8 @@
     border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-.btn:disabled {
+.btn:disabled,
+.btn.light:disabled {
     background-color: rgb(49, 49, 52);
     cursor: auto;
 }
