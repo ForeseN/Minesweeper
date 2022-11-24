@@ -31,7 +31,10 @@ var killMinesTimeoutId
 var isMinesBlowingUp
 
 var gBoard
-var gBoardMoves = []
+var gGameState = {
+    board: [],
+    lives: []
+}
 
 var isDark = true
 
@@ -60,6 +63,11 @@ function initGame() {
 }
 
 function clearSlate() {
+    // use default mines amount
+    if (gLevel.SIZE === BEGINNER_SIZE) gLevel.MINES = BEGINNER_MINES_AMOUNT
+    if (gLevel.SIZE === MEDIUM_SIZE) gLevel.MINES = MEDIUM_MINES_AMOUNT
+    if (gLevel.SIZE === EXPERT_SIZE) gLevel.MINES = EXPERT_MINES_AMOUNT
+
     const elBombsRemain = document.querySelector(".bombs-remaining")
     elBombsRemain.innerText = formatCounters(gLevel.MINES)
     document.querySelector(".container .timer").innerText = "000"
@@ -94,8 +102,27 @@ function clearSlate() {
 
     gMines = []
     megaHintFirstLoc = null
-    gBoardMoves = []
+    gGameState = []
     isMinesBlowingUp = false
+
+    gGameState = {
+        board: [],
+        lives: []
+    }
+}
+
+function disableButtons() {
+    document.querySelector(".hint").disabled = true
+    document.querySelector(".safe-click").disabled = true
+    document.querySelector(".mega-hint").disabled = true
+    document.querySelector(".kill-mines").disabled = true
+}
+
+function enableButtons() {
+    document.querySelector(".hint").disabled = false
+    document.querySelector(".safe-click").disabled = false
+    document.querySelector(".mega-hint").disabled = false
+    document.querySelector(".kill-mines").disabled = false
 }
 
 function buildBoard() {
@@ -138,6 +165,7 @@ function announceWin() {
 }
 
 function announceLose(i, j) {
+    disableButtons()
     const elSmiley = document.querySelector(".smiley")
     elSmiley.innerText = SMILEY_LOSER
     const elCell = getCellElement(i, j)
@@ -422,12 +450,21 @@ function onSandbox() {
 }
 
 function onUndo() {
-    if (gBoardMoves.length === 1) return
-    console.log(gBoardMoves)
-    gBoardMoves.pop()
-    // gBoard = gBoardMoves[gBoardMoves.length - 1]
-    gBoard = deepCopyMatrix(gBoardMoves[gBoardMoves.length - 1])
+    if (gGameState.board.length === 1) return
+    if (!gGame.isOn) { // UNDO from lose \ win
+        const elSmiley = document.querySelector(".smiley")
+        elSmiley.innerText = SMILEY_REGULAR
+        gGame.isOn = true
+        enableButtons()
+    }
+    console.log(gGameState)
+    gGameState.board.pop()
+    gGameState.lives.pop()
+    gGame.lives = gGameState.lives[gGameState.lives.length - 1]
+    // gBoard = gGameState[gGameState.length - 1]
+    gBoard = deepCopyMatrix(gGameState.board[gGameState.board.length - 1])
     renderBoardCellByCell()
+    updateUI()
 }
 
 function onToggleTheme() {

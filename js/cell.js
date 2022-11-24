@@ -34,7 +34,8 @@ function onCellClickedLeft(i, j) {
             setMinesNegsCount(gBoard)
         }
         startTimer()
-        gBoardMoves.push(deepCopyMatrix(gBoard))
+        gGameState.board.push(deepCopyMatrix(gBoard))
+        gGameState.lives.push(gGame.lives)
     }
 
     if (gGame.isHint) {
@@ -56,7 +57,8 @@ function onCellClickedLeft(i, j) {
     if (clickedCell.isMine) handleMine(i, j)
     else handleEmpty(i, j)
 
-    gBoardMoves.push(deepCopyMatrix(gBoard))
+    gGameState.board.push(deepCopyMatrix(gBoard))
+    gGameState.lives.push(gGame.lives)
 
     if (checkWin()) announceWin()
 }
@@ -160,6 +162,7 @@ function hideCell(i, j) {
     const elCell = getCellElement(i, j)
     elCell.classList.add("unopened")
     elCell.classList.remove("opened")
+    elCell.classList.remove("kill")
     elCell.innerText = ""
 }
 
