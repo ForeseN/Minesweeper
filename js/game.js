@@ -50,6 +50,10 @@ var megaHintFirstLoc
 var gGame
 
 function initGame() {
+    document.querySelector('.game-container').classList.add("fade")
+    setTimeout(() => {
+        document.querySelector('.game-container').classList.remove("fade")
+    }, 700)
     // wait for mines to blow up
     if (isMinesBlowingUp) return
 
@@ -221,7 +225,6 @@ async function blowUpMines(gMines) {
     const gameCard = document.querySelector(".game-container")
     gameCard.classList.remove("shake")
     gameCard.classList.add("ending-shake")
-    console.log(gameCard)
     isMinesBlowingUp = true
     for (var i = 0; i < gMines.length; i++) {
         const currMine = gMines[i]

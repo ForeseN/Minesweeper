@@ -71,13 +71,11 @@ function onKillMines() {
 
         const randomIndex = getRandomIntInclusive(0, unmarkedMines.length - 1)
         const randCell = unmarkedMines[randomIndex]
-        console.log(randCell)
         gBoard[randCell.i][randCell.j].isShown = true
         openCell(randCell.i, randCell.j)
         const elCell = getCellElement(randCell.i, randCell.j)
         elCell.classList.add("kill")
         killMinesTimeoutId = setTimeout(() => {
-            console.log(randCell.i, randCell.j)
             elCell.classList.remove("kill")
             gBoard[randCell.i][randCell.j].isMine = false
             openCell(randCell.i, randCell.j)
@@ -194,14 +192,13 @@ function onSandbox() {
 }
 
 function onUndo() {
-    if (gGameState.board.length === 1) return
+    if (gGameState.board.length === 1 || gGame.isSandboxNow) return
     if (!gGame.isOn) { // UNDO from lose \ win
         const elSmiley = document.querySelector(".smiley")
         elSmiley.innerText = SMILEY_REGULAR
         gGame.isOn = true
         handleButtons()
     }
-    console.log(gGameState)
     gGameState.board.pop()
     gGameState.lives.pop()
     gGameState.gameProperties.pop()

@@ -221,7 +221,6 @@ function hoverEvent(event) {
     const tempCellIndex = elCell.classList[1].split("-")
     const indexI = tempCellIndex[1]
     const indexJ = tempCellIndex[2]
-    // console.log(indexI, indexJ)
     showHover({ i: indexI, j: indexJ })
 }
 
