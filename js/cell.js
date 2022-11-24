@@ -94,7 +94,7 @@ function openCell(i, j) {
     const cell = gBoard[i][j]
     const elCell = getCellElement(i, j)
     elCell.classList.remove("unopened")
-    elCell.classList.remove("marked") // Removing mark just in case
+    elCell.classList.remove("marked")
     elCell.classList.remove("safe")
     elCell.classList.add("opened")
     // if (!isDark) elCell.add("light")
@@ -163,6 +163,7 @@ function hideCell(i, j) {
     elCell.classList.add("unopened")
     elCell.classList.remove("opened")
     elCell.classList.remove("kill")
+    if (cell.isMarked) elCell.classList.add("marked")
     elCell.innerText = ""
 }
 function addHoverEvent() {
