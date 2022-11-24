@@ -236,7 +236,9 @@ async function blowUpMines(gMines) {
 }
 
 async function rollOutBoard() {
-    const cellElements = document.querySelectorAll(".cell")
+    var cellElements = document.querySelectorAll(".cell")
+    // Shuffle array
+    cellElements = Array.from(cellElements).sort(() => Math.random() - 0.5);
     for (var i = 0; i < cellElements.length; i++) {
         const currCell = cellElements[i]
         console.log('YES')
