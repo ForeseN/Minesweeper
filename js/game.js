@@ -111,6 +111,8 @@ function clearSlate() {
         lives: [],
         gameProperties: []
     }
+
+    setHighScore()
 }
 
 function handleButtons() {
@@ -172,10 +174,54 @@ function checkWin() {
     return true
 }
 
+function setHighScore() {
+    const elHighScore = document.querySelector('.info-container-2 .high-score')
+    if (gLevel.SIZE === BEGINNER_SIZE) {
+        elHighScore.innerText = formatCounters(localStorage.getItem("beginnerHighScore"));
+    }
+    if (gLevel.SIZE === MEDIUM_SIZE) {
+        elHighScore.innerText = formatCounters(localStorage.getItem("mediumHighScore"));
+    }
+    if (gLevel.SIZE === EXPERT_SIZE) {
+        elHighScore.innerText = formatCounters(localStorage.getItem("expertHighScore"));
+    }
+    // console.log(localStorage.getItem("beginnerHighScore"))
+}
+
+function updateStorageHighScore() {
+    if (typeof (Storage) === "undefined") return
+    const score = gGame.secsPassed
+    if (gLevel.SIZE === BEGINNER_SIZE) {
+        const lastHighScore = localStorage.getItem("beginnerHighScore");
+        if (lastHighScore > score || lastHighScore == null) {
+            localStorage.setItem("beginnerHighScore", score);
+        }
+    }
+    if (gLevel.SIZE === MEDIUM_SIZE) {
+        const lastHighScore = localStorage.getItem("mediumHighScore");
+        if (lastHighScore > score || lastHighScore == null) {
+            localStorage.setItem("mediumHighScore", score);
+        }
+    }
+    if (gLevel.SIZE === EXPERT_SIZE) {
+        const lastHighScore = localStorage.getItem("expertHighScore");
+        if (lastHighScore > score || lastHighScore == null) {
+            localStorage.setItem("expertHighScore", score);
+        }
+    }
+    setHighScore()
+
+}
+
 function announceWin() {
+    // console.log(localStorage.getItem("beginnerHighScore"))
     const elSmiley = document.querySelector(".smiley")
     elSmiley.innerText = SMILEY_WINNER
     clearInterval(timerId)
+
+    if (!gGame.isSevenBoom && !gGame.isBuiltBySandbox) {
+        updateStorageHighScore()
+    }
     gGame.isOn = false
 }
 
@@ -478,7 +524,7 @@ function onUndo() {
         const elSmiley = document.querySelector(".smiley")
         elSmiley.innerText = SMILEY_REGULAR
         gGame.isOn = true
-        enableButtons()
+        handleButtons()
     }
     console.log(gGameState)
     gGameState.board.pop()
@@ -487,7 +533,7 @@ function onUndo() {
     gGame.lives = gGameState.lives[gGameState.lives.length - 1]
     // gGame = gGameState.gameProperties[gGameState.gameProperties.length - 1]
     gBoard = deepCopyMatrix(gGameState.board[gGameState.board.length - 1])
-    handleButtons()
+    // handleButtons()
     renderBoardCellByCell()
     updateUI()
 

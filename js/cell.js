@@ -229,7 +229,6 @@ function showHover(location) {
 }
 
 // TODO
-// 1. remove red color when on hover
 // 2. clean CSS & HTML
 // 3. Go over JS and see what can we fix
 // 4. Add specials js folder to keep things organized
