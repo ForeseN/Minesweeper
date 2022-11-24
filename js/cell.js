@@ -195,6 +195,7 @@ function showHover(location) {
         for (let j = megaHintFirstLoc.j; j <= location.j; j++) {
             // console.log(i, j)
             const elCell = getCellElement(i, j)
+            if (elCell.classList.contains("marked")) continue
             elCell.classList.add('hover')
         }
     }
