@@ -203,6 +203,7 @@ function announceWin() {
     if (!gGame.isSevenBoom && !gGame.isBuiltBySandbox) {
         updateStorageHighScore()
     }
+    throwConfetti()
     gGame.isOn = false
 }
 
@@ -317,4 +318,35 @@ function updateUI() {
     var BombsRemain = gLevel.MINES - gGame.markedCount
     var BombsRemainStr = formatCounters(BombsRemain)
     elBombsRemain.innerText = BombsRemainStr
+}
+
+async function throwConfetti() {
+    const dropConfettiTiming = {
+        duration: 5000,
+        iterations: 1,
+    }
+    const elConfettiWrapper = document.querySelector(".confetti-wrapper")
+    getRandomColor()
+    for (let i = 0; i < 400; i++) {
+        var confetti = document.createElement("div");
+        const width = getRandomIntInclusive(1, 8)
+        confetti.style.width = `${width} px`
+        confetti.style.height = `${width * 0.4}px`
+        confetti.style.backgroundColor = getRandomColor()
+        confetti.style.top = `-10%`
+        confetti.style.transform = `rotate(${getRandomIntInclusive(0, 360)}deg)`
+        confetti.style.left = `${getRandomIntInclusive(1, 80)}vw`
+        // confetti.style.left = getRandomIntInclusive(0, 100)
+        confetti.classList.add("confetti")
+        elConfettiWrapper.append(confetti)
+        // confetti.animate(dropConfetti, dropConfettiTiming)
+        confetti.animate({
+            transform: `translateY(${getRandomIntInclusive(200, 300)}vh) translateX(${getRandomIntInclusive(0, 60)}vw)`
+        }, dropConfettiTiming)
+        await timer(10)
+    }
+    setTimeout(() => elConfettiWrapper.innerHTML = "", 5000)
+    console.log(elConfettiWrapper)
+
+    // await timer(25)
 }
