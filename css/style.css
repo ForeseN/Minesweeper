@@ -186,6 +186,7 @@ td {
 
 .kill {
     animation: goRed 3s;
+    animation-fill-mode: forwards;
 }
 
 @keyframes goRed {

@@ -28,6 +28,7 @@ var gStartTime
 var megaHintTimeoutId
 var hintTimeoutId
 var killMinesTimeoutId
+var isMinesBlowingUp
 
 var gBoard
 var gBoardMoves = []
@@ -44,6 +45,9 @@ var megaHintFirstLoc
 var gGame
 
 function initGame() {
+    // wait for mines to blow up
+    if (isMinesBlowingUp) return
+
     if (timerId) {
         // restart
         clearInterval(timerId)
@@ -51,7 +55,6 @@ function initGame() {
     }
     gBoard = buildBoard()
     renderBoard(gBoard, ".board-container")
-    clearSlate()
     gGame.isOn = true
 }
 
@@ -91,6 +94,7 @@ function clearSlate() {
     gMines = []
     megaHintFirstLoc = null
     gBoardMoves = []
+    isMinesBlowingUp = false
 }
 
 function buildBoard() {
@@ -115,8 +119,9 @@ function checkWin() {
         for (let j = 0; j < gBoard[0].length; j++) {
             const currCell = gBoard[i][j]
             // if mine and not marked NOT WIN!
-            if (currCell.isMine && !currCell.isMarked && !currCell.isShown)
+            if (currCell.isMine && !currCell.isMarked && !currCell.isShown) {
                 return false
+            }
             // if not mine and not shown NOT WIN!
             if (!currCell.isMine && !currCell.isShown) return false
         }
@@ -136,12 +141,25 @@ function announceLose(i, j) {
     elSmiley.innerText = SMILEY_LOSER
     const elCell = getCellElement(i, j)
     elCell.style.backgroundColor = "red"
-    for (let i = 0; i < gMines.length; i++) {
-        const currMine = gMines[i]
-        openCell(currMine.i, currMine.j)
-    }
+    blowUpMines(gMines) // Using an async func
     clearInterval(timerId)
     gGame.isOn = false
+}
+
+
+const timer = ms => new Promise(res => setTimeout(res, ms))
+// We need to wrap the loop into an async function
+async function blowUpMines(gMines) {
+    isMinesBlowingUp = true
+    for (var i = 0; i < gMines.length; i++) {
+        const currMine = gMines[i]
+        openCell(currMine.i, currMine.j)
+        blowUpMine(currMine.i, currMine.j)
+        await timer(100); // then the created Promise can be awaited
+    }
+}
+function blowUpMine(i, j) {
+    getCellElement(i, j).classList.add("kill")
 }
 
 function startTimer() {
@@ -405,7 +423,7 @@ function onUndo() {
 }
 
 function onToggleTheme() {
-    isDark = false
+    isDark = !isDark
     const elToggleBtn = document.querySelector(".utilities .toggle-theme")
     if (elToggleBtn.innerText === LIGHT_THEME) {
         elToggleBtn.innerText = DARK_THEME
