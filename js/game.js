@@ -33,7 +33,8 @@ var isMinesBlowingUp
 var gBoard
 var gGameState = {
     board: [],
-    lives: []
+    lives: [],
+    gameProperties: []
 }
 
 var isDark = true
@@ -107,7 +108,21 @@ function clearSlate() {
 
     gGameState = {
         board: [],
-        lives: []
+        lives: [],
+        gameProperties: []
+    }
+}
+
+function handleButtons() {
+    if (gGame.canUseMegaHint) {
+        document.querySelector(".mega-hint").disabled = false
+    }
+    if (gGame.hints > 0) {
+        document.querySelector(".hint").disabled = false
+    } if (gGame.safeClick > 0) {
+        document.querySelector(".safe-click").disabled = false
+    } if (!gGame.isKilled) {
+        document.querySelector(".kill-mines").disabled = false
     }
 }
 
@@ -468,11 +483,14 @@ function onUndo() {
     console.log(gGameState)
     gGameState.board.pop()
     gGameState.lives.pop()
+    gGameState.gameProperties.pop()
     gGame.lives = gGameState.lives[gGameState.lives.length - 1]
-    // gBoard = gGameState[gGameState.length - 1]
+    // gGame = gGameState.gameProperties[gGameState.gameProperties.length - 1]
     gBoard = deepCopyMatrix(gGameState.board[gGameState.board.length - 1])
+    handleButtons()
     renderBoardCellByCell()
     updateUI()
+
 }
 
 function onToggleTheme() {

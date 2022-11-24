@@ -36,6 +36,7 @@ function onCellClickedLeft(i, j) {
         startTimer()
         gGameState.board.push(deepCopyMatrix(gBoard))
         gGameState.lives.push(gGame.lives)
+        gGameState.gameProperties.push(deepCopyGameProperties())
     }
 
     if (gGame.isHint) {
@@ -59,8 +60,31 @@ function onCellClickedLeft(i, j) {
 
     gGameState.board.push(deepCopyMatrix(gBoard))
     gGameState.lives.push(gGame.lives)
+    gGameState.gameProperties.push(deepCopyGameProperties())
 
     if (checkWin()) announceWin()
+}
+
+function deepCopyGameProperties() {
+    const copiedGame = {
+        isOn: gGame.isOn,
+        shownCount: gGame.shownCount,
+        markedCount: gGame.markedCount,
+        secsPassed: gGame.secsPassed,
+        lives: gGame.lives,
+        isHint: gGame.isHint,
+        hints: gGame.hints,
+        safeClick: gGame.safeClick,
+        isKilled: gGame.isKilled,
+        isMegaHint: gGame.isMegaHint,
+        canUseMegaHint: gGame.canUseMegaHint,
+        isSevenBoom: gGame.isSevenBoom,
+        isSandboxNow: gGame.isSandboxNow,
+        isBuiltBySandbox: gGame.isBuiltBySandbox,
+
+    }
+
+    return copiedGame
 }
 
 function handleEmpty(i, j) {
@@ -82,7 +106,8 @@ function handleMine(i, j) {
         document.querySelector('.game-container').classList.remove("shake")
     }, 500)
     const elCell = getCellElement(i, j)
-    elCell.style.backgroundColor = "red"
+    // elCell.style.backgroundColor = "red"
+    elCell.classList.add('red')
     gGame.lives--
     gGame.markedCount++
     updateUI()
@@ -163,6 +188,7 @@ function hideCell(i, j) {
     elCell.classList.add("unopened")
     elCell.classList.remove("opened")
     elCell.classList.remove("kill")
+    elCell.classList.remove("red")
     if (cell.isMarked) elCell.classList.add("marked")
     elCell.innerText = ""
 }
@@ -193,15 +219,17 @@ function showHover(location) {
 
     for (let i = megaHintFirstLoc.i; i <= location.i; i++) {
         for (let j = megaHintFirstLoc.j; j <= location.j; j++) {
-            // console.log(i, j)
+            const currCell = gBoard[i][j]
+            if (currCell.isMarked || currCell.isShown) continue
             const elCell = getCellElement(i, j)
-            if (elCell.classList.contains("marked")) continue
+            // if (elCell.classList.contains("marked")) continue
             elCell.classList.add('hover')
         }
     }
 }
 
 // TODO
+// 1. remove red color when on hover
 // 2. clean CSS & HTML
 // 3. Go over JS and see what can we fix
 // 4. Add specials js folder to keep things organized

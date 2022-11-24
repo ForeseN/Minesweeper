@@ -25,9 +25,9 @@
 }
 
 .hover {
-    background: #7097d1;
+    background: #7097d1 !important;
 }
 
 .hover.light {
-    background: #bccbe2;
+    background: #bccbe2 !important;
 }
