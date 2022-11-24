@@ -25,9 +25,9 @@ function onCellClickedLeft(i, j) {
             // Sevenboom does it automatically
             setRandomMines(i, j)
             setMinesNegsCount(gBoard)
-            gBoardMoves.push(deepCopyMatrix(gBoard))
         }
         startTimer()
+        gBoardMoves.push(deepCopyMatrix(gBoard))
     }
 
     if (gGame.isHint) {
@@ -45,11 +45,12 @@ function onCellClickedLeft(i, j) {
     clickedCell.isShown = true
     openCell(i, j)
     if (clickedCell.isMine) {
-        const elCell = document.querySelector(`.cell-${i}-${j}`)
-        elCell.style.backgroundColor = "red"
         // Clicked on Mine
+        const elCell = getCellElement(i, j)
+        elCell.style.backgroundColor = "red"
         gGame.lives--
-        renderLives()
+        gGame.markedCount++
+        updateUI()
         if (gGame.lives === 0) {
             // LOST
             announceLose(i, j)
@@ -74,7 +75,7 @@ function onCellClickedLeft(i, j) {
 function openCell(i, j) {
     // Select the elCell and set the value
     const cell = gBoard[i][j]
-    const elCell = document.querySelector(`.cell-${i}-${j}`)
+    const elCell = getCellElement(i, j)
     elCell.classList.remove("unopened")
     elCell.classList.remove("marked") // Removing mark just in case
     elCell.classList.remove("safe")
@@ -116,7 +117,7 @@ function onCellClickedRight(i, j) {
     const cell = gBoard[i][j]
     if (cell.isShown) return
 
-    const elCell = document.querySelector(`.cell-${i}-${j}`)
+    const elCell = getCellElement(i, j)
     cell.isMarked = true
     if (elCell.classList.contains("marked")) {
         gBoard[i][j].isMarked = false
@@ -128,10 +129,7 @@ function onCellClickedRight(i, j) {
         elCell.classList.add("marked")
     }
 
-    const elBombsRemain = document.querySelector(".bombs-remaining")
-    var BombsRemain = gLevel.MINES - gGame.markedCount
-    var BombsRemainStr = formatCounters(BombsRemain)
-    elBombsRemain.innerText = BombsRemainStr
+    updateUI()
 
     if (checkWin()) announceWin()
 }
@@ -146,7 +144,7 @@ function hideCells(cells) {
 function hideCell(i, j) {
     const cell = gBoard[i][j]
     cell.isShown = false
-    const elCell = document.querySelector(`.cell-${i}-${j}`)
+    const elCell = getCellElement(i, j)
     elCell.classList.add("unopened")
     elCell.classList.remove("opened")
     elCell.innerText = ""

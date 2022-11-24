@@ -8,7 +8,8 @@ function renderBoard(mat, selector) {
             const cell = mat[i][j]
             const type = cell.isMine ? "Mine" : ""
             const condition = cell.isShown ? "opened" : "unopened"
-            const className = `cell cell-${i}-${j} ${type} ${condition}`
+            const theme = isDark ? "" : "light"
+            const className = `cell cell-${i}-${j} ${type} ${condition} ${theme}`
             // let value = getCellValue(cell)
 
             strHTML += `<td class="${className}" onclick="onCellClickedLeft(${i},${j})" oncontextmenu="onCellClickedRight(${i},${j})";></td>`
@@ -91,4 +92,8 @@ function renderBoardCellByCell() {
             else hideCell(i, j)
         }
     }
+}
+
+function getCellElement(i, j) {
+    return document.querySelector(`.cell-${i}-${j}`)
 }

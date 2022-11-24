@@ -134,7 +134,7 @@ function announceWin() {
 function announceLose(i, j) {
     const elSmiley = document.querySelector(".smiley")
     elSmiley.innerText = SMILEY_LOSER
-    const elCell = document.querySelector(`.cell-${i}-${j}`)
+    const elCell = getCellElement(i, j)
     elCell.style.backgroundColor = "red"
     for (let i = 0; i < gMines.length; i++) {
         const currMine = gMines[i]
@@ -177,7 +177,8 @@ function changeDifficulty(difficulty) {
     initGame()
 }
 
-function renderLives() {
+function updateUI() {
+    // Updates lives
     const elLives = document.querySelector(".lives")
     switch (gGame.lives) {
         case 3:
@@ -194,9 +195,15 @@ function renderLives() {
             break
 
         default:
-            console.log("Problem with renderLives!")
+            console.log("Problem with updateUI!")
             break
     }
+
+    // Updates mines amount
+    const elBombsRemain = document.querySelector(".bombs-remaining")
+    var BombsRemain = gLevel.MINES - gGame.markedCount
+    var BombsRemainStr = formatCounters(BombsRemain)
+    elBombsRemain.innerText = BombsRemainStr
 }
 
 function onHint() {
@@ -238,7 +245,7 @@ function onSafeClick() {
 
     const randomIndex = getRandomIntInclusive(0, safeClicks.length - 1)
     const randCell = safeClicks[randomIndex]
-    const elCell = document.querySelector(`.cell-${randCell.i}-${randCell.j}`)
+    const elCell = getCellElement(randCell.i, randCell.j)
     elCell.classList.add("safe")
 
     gGame.safeClick--
@@ -274,9 +281,7 @@ function onKillMines() {
         console.log(randCell)
         gBoard[randCell.i][randCell.j].isShown = true
         openCell(randCell.i, randCell.j)
-        const elCell = document.querySelector(
-            `.cell-${randCell.i}-${randCell.j}`
-        )
+        const elCell = getCellElement(randCell.i, randCell.j)
         elCell.classList.add("kill")
         killMinesTimeoutId = setTimeout(() => {
             console.log(randCell.i, randCell.j)
@@ -398,7 +403,8 @@ function onUndo() {
     if (gBoardMoves.length === 1) return
     console.log(gBoardMoves)
     gBoardMoves.pop()
-    gBoard = gBoardMoves[gBoardMoves.length - 1]
+    // gBoard = gBoardMoves[gBoardMoves.length - 1]
+    gBoard = deepCopyMatrix(gBoardMoves[gBoardMoves.length - 1])
     renderBoardCellByCell()
 }
 
