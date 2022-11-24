@@ -63,12 +63,16 @@ td {
 }
 
 .unopened {
-    background: rgb(82, 116, 218);
+    background: #5274da;
     background: linear-gradient(180deg,
             rgba(82, 116, 218, 1) 0%,
-            rgba(54, 86, 177, 1) 46%);
+            #3656b1 46%);
     box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.2);
     cursor: pointer;
+}
+
+.unopened:hover {
+    opacity: 0.4;
 }
 
 .marked {
@@ -170,212 +174,6 @@ td {
 }
 
 
-.safe {
-    animation: opacityChange 0.5s infinite alternate;
-}
-
-@keyframes opacityChange {
-    0% {
-        opacity: 100%;
-    }
-
-    100% {
-        opacity: 0%;
-    }
-}
-
 .red {
     background: red;
-}
-
-.kill {
-    animation: goRed 3s;
-    animation-fill-mode: forwards;
-}
-
-@keyframes goRed {
-    /* 0% {
-        background: 100%;
-    } */
-
-    100% {
-        background: red;
-    }
-}
-
-/* LIGHT MODE!!! */
-.light {
-    background: rgb(198, 198, 198);
-    background: radial-gradient(circle, rgba(198, 198, 198, 1) 0%, rgba(94, 94, 94, 1) 61%);
-}
-
-
-.text-black {
-    color: black;
-}
-
-.game-card.light,
-.utilities button.light {
-    background: rgb(87, 87, 96);
-    color: black;
-}
-
-
-.info-container button.light,
-.difficulty-container button.light,
-.info-container div.light,
-.info-container-2 div.light {
-    background: rgb(198, 198, 198);
-    color: black;
-}
-
-.unopened.light {
-    background: rgb(126, 212, 255);
-    background: radial-gradient(circle, rgba(126, 212, 255, 1) 0%, rgba(61, 150, 255, 1) 60%);
-
-}
-
-.opened.light {
-    background: #eaeaea;
-    color: black;
-}
-
-
-.marked {
-    background: rgb(251, 223, 105);
-    background: linear-gradient(180deg,
-            rgba(251, 223, 105, 1) 0%,
-            rgba(237, 193, 60, 1) 46%);
-}
-
-
-
-/* .game-card,
-.utilities button {
-    background: #011623;
-}
-
-.info-container button,
-.difficulty-container button,
-.info-container div,
-.info-container-2 div {
-    background: #072234;
-}
-
-.unopened {
-    background: #23c8ec;
-}
-
-.opened {
-    background-color: #07273a;
-}
-
-.light {
-    background: #1c4967;
-} */
-
-/* Animation */
-.shake {
-    animation: shake 0.42s cubic-bezier(.36, .07, .19, .97) both;
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-    perspective: 1000px;
-}
-
-@keyframes shake {
-
-    10%,
-    90% {
-        transform: translate3d(-1px, -1px, -1px);
-    }
-
-    20%,
-    80% {
-        transform: translate3d(2px, 2px, 2px);
-    }
-
-    30%,
-    50%,
-    70% {
-        transform: translate3d(-2px, -2px, -2px);
-    }
-
-    40%,
-    60% {
-        transform: translate3d(2px, 2px, 2px);
-    }
-}
-
-.ending-shake {
-    animation: endingShake 0.32s cubic-bezier(.36, .07, .19, .97) infinite alternate;
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-    perspective: 1000px;
-}
-
-@keyframes endingShake {
-
-    /* 10%,
-    90% {
-        transform: translate3d(-2px, -2px, -2px);
-    }
-
-    20%,
-    80% {
-        transform: translate3d(3px, 3px, 3px);
-    }
-
-    30%,
-    50%,
-    70% {
-        transform: translate3d(-3px, -3px, -3px);
-    }
-
-    40%,
-    60% {
-        transform: translate3d(3px, 3px, 3px);
-    } */
-    0% {
-        transform: translate(1px, 1px) rotate(0deg);
-    }
-
-    10% {
-        transform: translate(-1px, -2px) rotate(-1deg);
-    }
-
-    20% {
-        transform: translate(-3px, 0px) rotate(1deg);
-    }
-
-    30% {
-        transform: translate(3px, 2px) rotate(0deg);
-    }
-
-    40% {
-        transform: translate(1px, -1px) rotate(1deg);
-    }
-
-    50% {
-        transform: translate(-1px, 2px) rotate(-1deg);
-    }
-
-    60% {
-        transform: translate(-3px, 1px) rotate(0deg);
-    }
-
-    70% {
-        transform: translate(3px, 1px) rotate(-1deg);
-    }
-
-    80% {
-        transform: translate(-1px, -1px) rotate(1deg);
-    }
-
-    90% {
-        transform: translate(1px, 2px) rotate(0deg);
-    }
-
-    100% {
-        transform: translate(1px, -2px) rotate(-1deg);
-    }
 }

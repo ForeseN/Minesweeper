@@ -134,3 +134,10 @@ function getNeighborsExclusive(rowIdx, colIdx, param = 0) {
     }
     return neighbors
 }
+
+
+function removeHover() {
+    const cellElements = document.querySelectorAll('.cell')
+    cellElements.forEach(elCell => elCell.classList.remove("hover"))
+    cellElements.forEach(elCell => elCell.removeEventListener("mouseover", hoverEvent))
+}

@@ -9,8 +9,20 @@ function getCellValue(cell) {
 }
 
 function handleSandbox(i, j) {
-    if (gBoard[i][j].isMine) gLevel.MINES--
-    else gLevel.MINES++
+    if (gBoard[i][j].isMine) {
+        gLevel.MINES--
+        for (let i = 0; i < gMines.length; i++) {
+            const currMine = gMines[i]
+            if (currMine.i === i && currMine.j === j) {
+                gMines.splice(i, 1)
+                break
+            }
+        }
+    }
+    else {
+        gMines.push({ i, j })
+        gLevel.MINES++
+    }
     gBoard[i][j].isMine = !gBoard[i][j].isMine
     openCell(i, j)
     const elBombsRemain = document.querySelector(".bombs-remaining")
@@ -231,6 +243,4 @@ function showHover(location) {
 // TODO
 // 2. clean CSS & HTML
 // 3. Go over JS and see what can we fix
-// 4. Add specials js folder to keep things organized
-// 5. add local storage
 // 6. make it even prettier!

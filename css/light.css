@@ -1,0 +1,53 @@
+.light {
+    background: rgb(198, 198, 198);
+    background: radial-gradient(circle, rgba(198, 198, 198, 1) 0%, rgba(94, 94, 94, 1) 61%);
+}
+
+
+.text-black {
+    color: black;
+}
+
+.game-card.light,
+.utilities button.light {
+    background: rgb(87, 87, 96);
+    color: black;
+}
+
+
+.info-container button.light,
+.difficulty-container button.light,
+.info-container div.light,
+.info-container-2 div.light {
+    background: rgb(198, 198, 198);
+    color: black;
+}
+
+.unopened.light {
+    background: #7ed4ff;
+    background: radial-gradient(circle, rgba(126, 212, 255, 1) 0%, #3d96ff 60%);
+
+}
+
+.unopened.light:hover {
+    opacity: 0.5;
+}
+
+
+.opened.light:not(.red) {
+    background: #eaeaea;
+    color: black;
+}
+
+
+.marked {
+    background: rgb(251, 223, 105);
+    background: linear-gradient(180deg,
+            rgba(251, 223, 105, 1) 0%,
+            rgba(237, 193, 60, 1) 46%);
+}
+
+.info-container-2 span.light {
+    color: black;
+    background: rgb(198, 198, 198);
+}
