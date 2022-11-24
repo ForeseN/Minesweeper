@@ -113,3 +113,19 @@
         transform: translate(1px, -2px) rotate(-1deg);
     }
 }
+
+.roll-out-bottom {
+    animation: roll-out-bottom 2.4s ease-out both;
+}
+
+@keyframes roll-out-bottom {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(800px) rotate(540deg);
+        opacity: 0;
+    }
+}

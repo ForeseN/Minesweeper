@@ -209,6 +209,7 @@ function announceLose(i, j) {
     const elCell = getCellElement(i, j)
     elCell.style.backgroundColor = "red"
     blowUpMines(gMines) // Using an async func
+    rollOutBoard()  // Using an async func
     clearInterval(timerId)
     gGame.isOn = false
 }
@@ -232,6 +233,19 @@ async function blowUpMines(gMines) {
     setTimeout(() => gameCard.classList.remove("ending-shake"), 500)
 
     isMinesBlowingUp = false
+}
+
+async function rollOutBoard() {
+    const cellElements = document.querySelectorAll(".cell")
+    for (var i = 0; i < cellElements.length; i++) {
+        const currCell = cellElements[i]
+        console.log('YES')
+        if (Math.random() > 0.4) {
+            console.log('EVEN MORE YES')
+            currCell.classList.add("roll-out-bottom")
+        }
+        await timer(25); // then the created Promise can be awaited
+    }
 }
 function blowUpMine(i, j) {
     getCellElement(i, j).classList.add("kill")

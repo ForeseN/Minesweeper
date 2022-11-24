@@ -133,6 +133,7 @@ function openCell(i, j) {
     elCell.classList.remove("unopened")
     elCell.classList.remove("marked")
     elCell.classList.remove("safe")
+    elCell.classList.remove("roll-out-bottom")
     elCell.classList.add("opened")
     // if (!isDark) elCell.add("light")
     elCell.innerHTML = getCellValue(cell)
@@ -201,6 +202,7 @@ function hideCell(i, j) {
     elCell.classList.remove("opened")
     elCell.classList.remove("kill")
     elCell.classList.remove("red")
+    elCell.classList.remove("roll-out-bottom")
     if (cell.isMarked) elCell.classList.add("marked")
     elCell.innerText = ""
 }
