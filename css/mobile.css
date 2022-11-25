@@ -1,0 +1,81 @@
+@media (max-width: 640px) {
+    body {
+        overflow-y: auto;
+        overflow-x: hidden;
+        min-height: 100%;
+    }
+
+    .mobile-hidden {
+        display: none;
+    }
+
+    img {
+        min-width: 13px;
+        max-width: 13px;
+        font-size: 1rem;
+    }
+
+    td {
+        min-width: 23px;
+        max-width: 23px;
+        height: 23px;
+        font-size: 1rem;
+    }
+
+    .difficulty-container {
+        padding-top: 1rem;
+        margin: 0;
+        padding-bottom: 1rem;
+    }
+
+    .difficulty-container .btn {
+        /* width: 30%; */
+        text-align: center;
+        font-size: 0.7rem;
+        margin: 0;
+    }
+
+    .game-container {
+        display: block;
+        width: 100%;
+    }
+
+    .game-card {
+        margin-top: 0%;
+        align-self: center;
+        margin: 0 auto;
+        width: 90%;
+    }
+
+    .utilities {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        padding-bottom: 1rem;
+        padding-top: 1rem;
+    }
+
+    .utilities .btn {
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+        margin-top: 0rem;
+        margin-bottom: 0rem;
+        min-width: 65px;
+    }
+
+    .mobile-footer {
+        margin: 0;
+        margin-top: 0.3rem;
+        padding: 0;
+        font-size: 0.8rem;
+    }
+
+
+}
+
+@media (min-width: 641px) {
+    .pc-hidden {
+        display: none;
+    }
+}

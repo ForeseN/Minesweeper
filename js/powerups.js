@@ -2,11 +2,14 @@
 
 
 function onHint() {
+    if (gIsAnimating) return
+
     if (gGame.hints > 0) gGame.isHint = true
 }
 
 function useHint(rowIdx, colIdx) {
     gGame.hints--
+    document.querySelector(".hint").dataset.title = `Hints: ${gGame.hints}`
     const hideAfterHintCells = []
     const neighbors = getNeighborsInclusive(rowIdx, colIdx, 1)
     for (let i = 0; i < neighbors.length; i++) {
@@ -14,6 +17,7 @@ function useHint(rowIdx, colIdx) {
         const currCell = gBoard[neighborLoc.i][neighborLoc.j]
         if (currCell.isShown) continue
         // show cell for hint
+        // flipCell(neighborLoc.i, neighborLoc.j, 1000)
         currCell.isShown = true
         openCell(neighborLoc.i, neighborLoc.j)
         hideAfterHintCells.push({ i: neighborLoc.i, j: neighborLoc.j })
@@ -30,6 +34,8 @@ function useHint(rowIdx, colIdx) {
 }
 
 function onSafeClick() {
+    if (gIsAnimating) return
+
     if (gGame.safeClick <= 0) return
 
     const safeClicks = getSafeClicks()
@@ -42,6 +48,7 @@ function onSafeClick() {
     elCell.classList.add("safe")
 
     gGame.safeClick--
+    document.querySelector(".safe-click").dataset.title = `Safe Clicks: ${gGame.safeClick}`
     if (gGame.safeClick === 0) {
         // Disable button
         document.querySelector(".safe-click").disabled = true
@@ -60,28 +67,34 @@ function getSafeClicks() {
 }
 
 function onKillMines() {
+    if (gIsAnimating) return
+
     if (gGame.isKilled || gMines.length === 0) return
     gGame.isKilled = true
-    document.querySelector(".kill-mines").disabled = true
+    const killMinesBtn = document.querySelector(".kill-mines")
+    killMinesBtn.dataset.title = `Exterminator: 0`
+    killMinesBtn.disabled = true
     const unmarkedMines = getUnmarkedMines()
     const unmarkedMinesLength = unmarkedMines.length // static length
-
     for (let i = 0; i < EXTERMINATOR_AMOUNT && i < unmarkedMinesLength; i++) {
         if (gMines.length === 0) return // happens in easy mode
 
+        gGame.markedCount++
         const randomIndex = getRandomIntInclusive(0, unmarkedMines.length - 1)
         const randCell = unmarkedMines[randomIndex]
         gBoard[randCell.i][randCell.j].isShown = true
-        openCell(randCell.i, randCell.j)
+        flipCell(randCell.i, randCell.j, 250, 1) // 1 to open, 0 to close
         const elCell = getCellElement(randCell.i, randCell.j)
         elCell.classList.add("kill")
         killMinesTimeoutId = setTimeout(() => {
             elCell.classList.remove("kill")
+            elCell.classList.remove("red")
             gBoard[randCell.i][randCell.j].isMine = false
             openCell(randCell.i, randCell.j)
             setMinesNegsCount(gBoard)
             updateNeighbors(randCell.i, randCell.j)
-        }, 3000)
+            updateUI()
+        }, 2500)
         unmarkedMines.splice(unmarkedMines.indexOf(randCell), 1)
     }
 }
@@ -90,7 +103,7 @@ function getUnmarkedMines() {
     const unmarkedMines = []
     for (let i = 0; i < gMines.length; i++) {
         const currMine = gMines[i]
-        if (!gBoard[currMine.i][currMine.j].isMarked) {
+        if (!gBoard[currMine.i][currMine.j].isMarked && !gBoard[currMine.i][currMine.j].isShown) {
             unmarkedMines.push(currMine)
         }
     }
@@ -110,6 +123,8 @@ function updateNeighbors(rowIdx, colIdx) {
 }
 
 function onMegaHint() {
+    if (gIsAnimating) return
+
     if (!gGame.canUseMegaHint) return // it means we already used it!
     gGame.isMegaHint = true
     gGame.canUseMegaHint = false
@@ -123,22 +138,35 @@ function useMegaHint(i, j) {
     }
     removeHover()
     const megaHintSecondLoc = { i, j }
-    for (let i = megaHintFirstLoc.i; i < megaHintSecondLoc.i + 1; i++) {
-        for (let j = megaHintFirstLoc.j; j < megaHintSecondLoc.j + 1; j++) {
+    const megaHintBiggerLoc = {
+        i: Math.max(megaHintFirstLoc.i, megaHintSecondLoc.i),
+        j: Math.max(megaHintFirstLoc.j, megaHintSecondLoc.j)
+    }
+    const megaHintSmallerLoc = {
+        i: Math.min(megaHintFirstLoc.i, megaHintSecondLoc.i),
+        j: Math.min(megaHintFirstLoc.j, megaHintSecondLoc.j)
+    }
+    for (let i = megaHintSmallerLoc.i; i < megaHintBiggerLoc.i + 1; i++) {
+        for (let j = megaHintSmallerLoc.j; j < megaHintBiggerLoc.j + 1; j++) {
             if (gBoard[i][j].isShown) continue
             openCell(i, j)
+
             megaHintTimeoutId = setTimeout(() => {
-                hideCell(i, j)
+                flipCell(i, j)
+                setTimeout(() => hideCell(i, j), 200)
             }, 2000)
         }
     }
-
-    document.querySelector(".mega-hint").disabled = true
+    const megaHintBtn = document.querySelector(".mega-hint")
+    megaHintBtn.dataset.title = `Mega Hint: 0`
+    megaHintBtn.disabled = true
     gGame.isMegaHint = false
 }
 
 
 function onSevenBoom() {
+    if (gIsAnimating) return
+
     initGame()
     gGame.isSevenBoom = true
     var cellIndex = 1
@@ -162,6 +190,8 @@ function isSevenBoom(num) {
 }
 
 function onSandbox() {
+    if (gIsAnimating) return
+
     if (gGame.isSandboxNow) {
         // we need to start game!
         gGame.isSandboxNow = false
@@ -191,25 +221,33 @@ function onSandbox() {
     }
 }
 
+
 function onUndo() {
+    if (gIsAnimating) return
     if (gGameState.board.length === 1 || gGame.isSandboxNow) return
+
     if (!gGame.isOn) { // UNDO from lose \ win
         const elSmiley = document.querySelector(".smiley")
         elSmiley.innerText = SMILEY_REGULAR
         gGame.isOn = true
         handleButtons()
+        gIsAnimating = true
+        setTimeout(() => gIsAnimating = false, 2000)
     }
     gGameState.board.pop()
     gGameState.lives.pop()
     gGameState.gameProperties.pop()
     gGame.lives = gGameState.lives[gGameState.lives.length - 1]
     // gGame = gGameState.gameProperties[gGameState.gameProperties.length - 1]
+    gTempBoardForUndoEffects = deepCopyMatrix(gBoard)
     gBoard = deepCopyMatrix(gGameState.board[gGameState.board.length - 1])
     // handleButtons()
-    renderBoardCellByCell()
+    if (gIsAnimating) rollInBoard()
+    else renderBoardCellsAnimated()
     updateUI()
 
 }
+
 
 function onToggleTheme() {
     isDark = !isDark

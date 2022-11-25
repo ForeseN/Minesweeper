@@ -31,7 +31,7 @@ function handleSandbox(i, j) {
 
 function onCellClickedLeft(i, j) {
 
-    if (!gGame.isOn) return
+    if (!gGame.isOn || gIsAnimating) return
 
     if (gGame.isSandboxNow) {
         handleSandbox(i, j)
@@ -157,7 +157,7 @@ function openNearbyCells(rowIdx, colIdx) {
 }
 
 function onCellClickedRight(i, j) {
-    if (!gGame.isOn) return
+    if (!gGame.isOn || gIsAnimating) return
     if (!timerId) {
         // Game init
         setRandomMines(i, j)
@@ -190,7 +190,9 @@ function handleMark(i, j) {
 function hideCells(cells) {
     for (let i = 0; i < cells.length; i++) {
         const currCell = cells[i]
-        hideCell(currCell.i, currCell.j)
+        flipCell(currCell.i, currCell.j)
+        setTimeout(() => hideCell(currCell.i, currCell.j), 200)
+
     }
 }
 
@@ -229,9 +231,16 @@ function showHover(location) {
 
     const cellElements = document.querySelectorAll('.cell')
     cellElements.forEach(elCell => elCell.classList.remove("hover"))
-
-    for (let i = megaHintFirstLoc.i; i <= location.i; i++) {
-        for (let j = megaHintFirstLoc.j; j <= location.j; j++) {
+    const megaHintBiggerLoc = {
+        i: Math.max(megaHintFirstLoc.i, location.i),
+        j: Math.max(megaHintFirstLoc.j, location.j)
+    }
+    const megaHintSmallerLoc = {
+        i: Math.min(megaHintFirstLoc.i, location.i),
+        j: Math.min(megaHintFirstLoc.j, location.j)
+    }
+    for (let i = megaHintSmallerLoc.i; i <= megaHintBiggerLoc.i; i++) {
+        for (let j = megaHintSmallerLoc.j; j <= megaHintBiggerLoc.j; j++) {
             const currCell = gBoard[i][j]
             if (currCell.isMarked || currCell.isShown) continue
             const elCell = getCellElement(i, j)
@@ -239,6 +248,26 @@ function showHover(location) {
             elCell.classList.add('hover')
         }
     }
+}
+
+
+function getCellElement(i, j) {
+    return document.querySelector(`.cell-${i}-${j}`)
+}
+
+function findEmptyCells() {
+    const res = []
+    for (let i = 0; i < gBoard.length; i++) {
+        for (let j = 0; j < gBoard[0].length; j++) {
+            const currCell = gBoard[i][j]
+            if (isEmptyCell(currCell)) res.push({ i, j })
+        }
+    }
+    return res
+}
+
+function isEmptyCell(cell) {
+    return !cell.isMine
 }
 
 // TODO

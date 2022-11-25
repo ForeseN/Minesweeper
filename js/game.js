@@ -16,6 +16,7 @@ const LIGHT_THEME = "☀️"
 const BEGINNER_MINES_AMOUNT = 2
 const MEDIUM_MINES_AMOUNT = 14
 const EXPERT_MINES_AMOUNT = 32
+const EXPERT_MOBILE_MINES_AMOUNT = 24
 
 const BEGINNER_SIZE = 4
 const MEDIUM_SIZE = 8
@@ -29,6 +30,7 @@ var megaHintTimeoutId
 var hintTimeoutId
 var killMinesTimeoutId
 var isMinesBlowingUp
+var gIsAnimating
 
 var gBoard
 var gGameState = {
@@ -36,6 +38,9 @@ var gGameState = {
     lives: [],
     gameProperties: []
 }
+
+var gTempBoardForUndoEffects
+var gRolledOutBottomEffectCells
 
 var isDark = true
 
@@ -55,7 +60,7 @@ function initGame() {
         document.querySelector('.game-container').classList.remove("fade")
     }, 700)
     // wait for mines to blow up
-    if (isMinesBlowingUp) return
+    if (gIsAnimating) return
 
     if (timerId) {
         // restart
@@ -79,6 +84,12 @@ function clearSlate() {
     document.querySelector(".container .timer").innerText = "000"
     document.querySelector(".smiley").innerText = SMILEY_REGULAR
     document.querySelector(".lives").innerText = `${LIFE}${LIFE}${LIFE}`
+
+    document.querySelector(".hint").dataset.title = `Hints: 3`
+    document.querySelector(".safe-click").dataset.title = `Safe Clicks: 3`
+    document.querySelector(".kill-mines").dataset.title = `Exterminator: 1`
+    document.querySelector(".mega-hint").dataset.title = `Mega Hint: 1`
+
     clearTimeout(megaHintTimeoutId)
     clearTimeout(hintTimeoutId)
     clearTimeout(killMinesTimeoutId)
@@ -109,14 +120,15 @@ function clearSlate() {
     gMines = []
     megaHintFirstLoc = null
     gGameState = []
-    isMinesBlowingUp = false
 
     gGameState = {
         board: [],
         lives: [],
         gameProperties: []
     }
-
+    gTempBoardForUndoEffects = null
+    gRolledOutBottomEffectCells = []
+    gIsAnimating = false
     setHighScore()
 }
 
@@ -226,7 +238,7 @@ async function blowUpMines(gMines) {
     const gameCard = document.querySelector(".game-container")
     gameCard.classList.remove("shake")
     gameCard.classList.add("ending-shake")
-    isMinesBlowingUp = true
+    gIsAnimating = true
     for (var i = 0; i < gMines.length; i++) {
         const currMine = gMines[i]
         openCell(currMine.i, currMine.j)
@@ -236,7 +248,7 @@ async function blowUpMines(gMines) {
     }
     setTimeout(() => gameCard.classList.remove("ending-shake"), 500)
 
-    isMinesBlowingUp = false
+    gIsAnimating = false
 }
 
 async function rollOutBoard() {
@@ -244,14 +256,16 @@ async function rollOutBoard() {
     // Shuffle array
     cellElements = Array.from(cellElements).sort(() => Math.random() - 0.5);
     for (var i = 0; i < cellElements.length; i++) {
-        const currCell = cellElements[i]
+        const elCurrCell = cellElements[i]
         if (Math.random() > 0.4) {
-            currCell.classList.add("roll-out-bottom")
+            gRolledOutBottomEffectCells.push(elCurrCell)
+            elCurrCell.classList.add("roll-out-bottom")
         }
         await timer(25); // then the created Promise can be awaited
     }
 }
 function blowUpMine(i, j) {
+    gBoard[i][j].isShown = true
     getCellElement(i, j).classList.add("kill")
 }
 
@@ -280,6 +294,7 @@ function changeDifficulty(difficulty) {
             gLevel.DIFFICULTY = 'medium'
             break
         case "expert":
+            if (isMobileDevice()) return // NOT AVAILABLE FOR MOBILE ATM
             gLevel.MINES = EXPERT_MINES_AMOUNT
             gLevel.SIZE = EXPERT_SIZE
             gLevel.DIFFICULTY = 'expert'
@@ -321,32 +336,29 @@ function updateUI() {
 }
 
 async function throwConfetti() {
+    var confettiAmount = 400
     const dropConfettiTiming = {
-        duration: 5000,
+        duration: 2000,
         iterations: 1,
     }
+    if (isMobileDevice()) confettiAmount = 100 // Performance 
     const elConfettiWrapper = document.querySelector(".confetti-wrapper")
     getRandomColor()
-    for (let i = 0; i < 400; i++) {
+    for (let i = 0; i < confettiAmount; i++) {
         var confetti = document.createElement("div");
-        const width = getRandomIntInclusive(1, 30)
+        const width = getRandomIntInclusive(4, 35)
         confetti.style.width = `${width} px`
         confetti.style.height = `${width * 0.4}px`
         confetti.style.backgroundColor = getRandomColor()
         confetti.style.top = `-10%`
         confetti.style.transform = `rotate(${getRandomIntInclusive(0, 360)}deg)`
         confetti.style.left = `${getRandomIntInclusive(1, 90)}vw`
-        // confetti.style.left = getRandomIntInclusive(0, 100)
         confetti.classList.add("confetti")
         elConfettiWrapper.append(confetti)
-        // confetti.animate(dropConfetti, dropConfettiTiming)
         confetti.animate({
-            transform: `translateY(${getRandomIntInclusive(200, 300)}vh) translateX(${getRandomIntInclusive(0, 60)}vw)`
+            transform: `translateY(110vh) translateX(${getRandomIntInclusive(0, 20)}vw)`
         }, dropConfettiTiming)
         await timer(10)
     }
     setTimeout(() => elConfettiWrapper.innerHTML = "", 5000)
-    console.log(elConfettiWrapper)
-
-    // await timer(25)
 }

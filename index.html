@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/light.css">
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mobile.css">
     <title>Minesweeper</title>
 </head>
 
@@ -18,18 +19,20 @@
         <!-- <div class="confetti">Hey</div> -->
     </div>
     <div class="container">
-        <h1>Minesweeper</h1>
+        <div class="mobile-footer pc-hidden">Developed & Designed by Yaron Shapira</div>
+        <h1 class="mobile-hidden">Minesweeper</h1>
         <div class="difficulty-container">
             <button class="btn" onclick="changeDifficulty('beginner')">Beginner</button>
             <button class="btn" onclick="changeDifficulty('medium')">Medium</button>
             <button class="btn" onclick="changeDifficulty('expert')">Expert</button>
+            <!-- <button class="pc-hidden btn" onclick="changeDifficulty('expertMobile')">Expert</button> -->
         </div>
         <div class="game-container">
             <div class="utilities">
-                <button class="hint hold btn" onclick="onHint()">💡</button>
-                <button class="safe-click btn" onclick="onSafeClick()">🛡️</button>
-                <button class="kill-mines btn" onclick="onKillMines()">💀</button>
-                <button class="mega-hint btn" onclick="onMegaHint()">🙏</button>
+                <button class="hint hold btn" data-title="Hints: 3" onclick="onHint()">💡</button>
+                <button class="safe-click btn" data-title="Safe Clicks: 3" onclick="onSafeClick()">🛡️</button>
+                <button class="kill-mines btn" data-title="Exterminator: 1" onclick="onKillMines()">💀</button>
+                <button class="mega-hint btn" data-title="Mega Hint: 1" onclick="onMegaHint()">🙏</button>
             </div>
             <div class="game-card">
 
@@ -47,13 +50,13 @@
                 </div>
             </div>
             <div class="utilities">
-                <button class="seven-boom btn" onclick="onSevenBoom()">7</button>
-                <button class="sandbox btn" onclick="onSandbox()">🕹️</button>
-                <button class="undo btn" onclick="onUndo()">⏪</button>
-                <button class="toggle-theme btn" onclick="onToggleTheme()">☀️</button>
+                <button class="seven-boom btn" data-title="Seven Boom" onclick="onSevenBoom()">7</button>
+                <button class="sandbox btn" data-title="Sandbox" onclick="onSandbox()">🕹️</button>
+                <button class="undo btn" data-title="Undo" onclick="onUndo()">⏪</button>
+                <button class="toggle-theme btn" data-title="Toggle Theme" onclick="onToggleTheme()">☀️</button>
             </div>
         </div>
-        <div class="footer">Developed & Designed by Yaron Shapira</div>
+        <div class="footer mobile-hidden">Developed & Designed by Yaron Shapira</div>
     </div>
 
 
@@ -61,6 +64,7 @@
     <script src="js/mine.js"></script>
     <script src="js/cell.js"></script>
     <script src="js/powerups.js"></script>
+    <script src="js/board.js"></script>
     <script src="js/game.js"></script>
 </body>
 
