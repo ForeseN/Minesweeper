@@ -86,11 +86,13 @@ function handleMark(i, j) {
     if (elCell.classList.contains("marked")) {
         gBoard[i][j].isMarked = false
         gGame.markedCount--
-        elCell.classList.remove("marked")
+        flipCell(i, j)
+        setTimeout(() => elCell.classList.remove("marked"), 200)
     } else {
         gBoard[i][j].isMarked = true
         gGame.markedCount++
-        elCell.classList.add("marked")
+        flipCell(i, j)
+        setTimeout(() => elCell.classList.add("marked"), 250)
     }
 }
 

@@ -267,7 +267,7 @@ function onUndo() {
         gGame.isOn = true
         handleButtons()
         gIsAnimating = true  // different animation
-        setTimeout(() => gIsAnimating = false, 2000)
+        setTimeout(() => gIsAnimating = false, 1500)
     }
 
     gGameState.board.pop() // old board
