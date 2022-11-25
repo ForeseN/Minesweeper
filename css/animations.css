@@ -221,6 +221,7 @@
     position: absolute;
     animation-timing-function: linear;
     animation: drop 1s linear;
+    z-index: 10;
 }
 
 .flip-horizontal-bottom {

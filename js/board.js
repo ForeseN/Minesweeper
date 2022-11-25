@@ -31,6 +31,9 @@ function renderBoardCellsAnimated() {
                 openCell(i, j)
             } else if (oldBoardCell.isShown) { // Animate
                 flipCell(i, j)
+                if (oldBoardCell.isMine) {
+                    gGame.markedCount--
+                }
             } else {
                 hideCell(i, j)
             }
@@ -47,7 +50,7 @@ function flipCell(i, j, time = 250, close = 0) {
     setTimeout(() => elCurrCell.classList.remove("flip-horizontal-bottom"), time + 50)
 }
 
-async function rollInBoard() {
+async function rollInBoardAfterLose() {
     for (let i = 0; i < gBoard.length; i++) {
         for (let j = 0; j < gBoard[i].length; j++) {
             const currCell = gBoard[i][j]
@@ -72,4 +75,21 @@ async function rollInBoard() {
             await timer(10);
         }
     }
+}
+
+function buildBoard() {
+    const board = []
+    for (let i = 0; i < gLevel.SIZE; i++) {
+        board[i] = []
+        for (let j = 0; j < gLevel.SIZE; j++) {
+            board[i][j] = {
+                minesAroundCount: 0,
+                isShown: false,
+                isMine: false,
+                isMarked: false,
+                isOpened: false,
+            }
+        }
+    }
+    return board
 }

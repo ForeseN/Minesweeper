@@ -8,27 +8,6 @@ function getCellValue(cell) {
     return value
 }
 
-function handleSandbox(i, j) {
-    if (gBoard[i][j].isMine) {
-        gLevel.MINES--
-        for (let i = 0; i < gMines.length; i++) {
-            const currMine = gMines[i]
-            if (currMine.i === i && currMine.j === j) {
-                gMines.splice(i, 1)
-                break
-            }
-        }
-    }
-    else {
-        gMines.push({ i, j })
-        gLevel.MINES++
-    }
-    gBoard[i][j].isMine = !gBoard[i][j].isMine
-    openCell(i, j)
-    const elBombsRemain = document.querySelector(".bombs-remaining")
-    elBombsRemain.innerText = formatCounters(gLevel.MINES)
-}
-
 function onCellClickedLeft(i, j) {
 
     if (!gGame.isOn || gIsAnimating) return
@@ -77,27 +56,38 @@ function onCellClickedLeft(i, j) {
     if (checkWin()) announceWin()
 }
 
-function deepCopyGameProperties() {
-    const copiedGame = {
-        isOn: gGame.isOn,
-        shownCount: gGame.shownCount,
-        markedCount: gGame.markedCount,
-        secsPassed: gGame.secsPassed,
-        lives: gGame.lives,
-        isHint: gGame.isHint,
-        hints: gGame.hints,
-        safeClick: gGame.safeClick,
-        isKilled: gGame.isKilled,
-        isMegaHint: gGame.isMegaHint,
-        canUseMegaHint: gGame.canUseMegaHint,
-        isSevenBoom: gGame.isSevenBoom,
-        isSandboxNow: gGame.isSandboxNow,
-        isBuiltBySandbox: gGame.isBuiltBySandbox,
 
+function onCellClickedRight(i, j) {
+    if (!gGame.isOn || gIsAnimating) return
+    if (!timerId) {
+        // Game init
+        setRandomMines(i, j)
+        setMinesNegsCount(gBoard)
+        startTimer()
     }
 
-    return copiedGame
+    const cell = gBoard[i][j]
+    if (cell.isShown) return
+
+    handleMark(i, j)
+    updateUI()
+
+    if (checkWin()) announceWin()
 }
+
+function handleMark(i, j) {
+    const elCell = getCellElement(i, j)
+    if (elCell.classList.contains("marked")) {
+        gBoard[i][j].isMarked = false
+        gGame.markedCount--
+        elCell.classList.remove("marked")
+    } else {
+        gBoard[i][j].isMarked = true
+        gGame.markedCount++
+        elCell.classList.add("marked")
+    }
+}
+
 
 function handleEmpty(i, j) {
     const clickedCell = gBoard[i][j]
@@ -139,6 +129,7 @@ function openCell(i, j) {
     elCell.innerHTML = getCellValue(cell)
 }
 
+// Recursively opens cells nearby
 function openNearbyCells(rowIdx, colIdx) {
     gBoard[rowIdx][colIdx].isOpened = true
     const neighbors = getNeighborsExclusive(rowIdx, colIdx, 1)
@@ -153,37 +144,6 @@ function openNearbyCells(rowIdx, colIdx) {
             currCell.isShown = true
             openCell(neighborLoc.i, neighborLoc.j)
         }
-    }
-}
-
-function onCellClickedRight(i, j) {
-    if (!gGame.isOn || gIsAnimating) return
-    if (!timerId) {
-        // Game init
-        setRandomMines(i, j)
-        setMinesNegsCount(gBoard)
-        startTimer()
-    }
-
-    const cell = gBoard[i][j]
-    if (cell.isShown) return
-
-    handleMark(i, j)
-    updateUI()
-
-    if (checkWin()) announceWin()
-}
-
-function handleMark(i, j) {
-    const elCell = getCellElement(i, j)
-    if (elCell.classList.contains("marked")) {
-        gBoard[i][j].isMarked = false
-        gGame.markedCount--
-        elCell.classList.remove("marked")
-    } else {
-        gBoard[i][j].isMarked = true
-        gGame.markedCount++
-        elCell.classList.add("marked")
     }
 }
 
@@ -208,48 +168,30 @@ function hideCell(i, j) {
     if (cell.isMarked) elCell.classList.add("marked")
     elCell.innerText = ""
 }
-function addHoverEvent() {
-    if (!gGame.isMegaHint) return
 
-    const cellElements = document.querySelectorAll('.cell')
-    for (let i = 0; i < cellElements.length; i++) {
-        const cell = cellElements[i]
-        cell.addEventListener("mouseover", hoverEvent)
+
+
+function deepCopyGameProperties() {
+    const copiedGame = {
+        isOn: gGame.isOn,
+        shownCount: gGame.shownCount,
+        markedCount: gGame.markedCount,
+        secsPassed: gGame.secsPassed,
+        lives: gGame.lives,
+        isHint: gGame.isHint,
+        hints: gGame.hints,
+        safeClick: gGame.safeClick,
+        isKilled: gGame.isKilled,
+        isMegaHint: gGame.isMegaHint,
+        canUseMegaHint: gGame.canUseMegaHint,
+        isSevenBoom: gGame.isSevenBoom,
+        isSandboxNow: gGame.isSandboxNow,
+        isBuiltBySandbox: gGame.isBuiltBySandbox,
+
     }
+
+    return copiedGame
 }
-
-function hoverEvent(event) {
-    const elCell = event.srcElement
-    const tempCellIndex = elCell.classList[1].split("-")
-    const indexI = tempCellIndex[1]
-    const indexJ = tempCellIndex[2]
-    showHover({ i: indexI, j: indexJ })
-}
-
-function showHover(location) {
-    if (!gGame.isMegaHint) return
-
-    const cellElements = document.querySelectorAll('.cell')
-    cellElements.forEach(elCell => elCell.classList.remove("hover"))
-    const megaHintBiggerLoc = {
-        i: Math.max(megaHintFirstLoc.i, location.i),
-        j: Math.max(megaHintFirstLoc.j, location.j)
-    }
-    const megaHintSmallerLoc = {
-        i: Math.min(megaHintFirstLoc.i, location.i),
-        j: Math.min(megaHintFirstLoc.j, location.j)
-    }
-    for (let i = megaHintSmallerLoc.i; i <= megaHintBiggerLoc.i; i++) {
-        for (let j = megaHintSmallerLoc.j; j <= megaHintBiggerLoc.j; j++) {
-            const currCell = gBoard[i][j]
-            if (currCell.isMarked || currCell.isShown) continue
-            const elCell = getCellElement(i, j)
-            // if (elCell.classList.contains("marked")) continue
-            elCell.classList.add('hover')
-        }
-    }
-}
-
 
 function getCellElement(i, j) {
     return document.querySelector(`.cell-${i}-${j}`)
@@ -271,6 +213,7 @@ function isEmptyCell(cell) {
 }
 
 // TODO
+// 1. Clean JS
 // 2. clean CSS & HTML
-// 3. Go over JS and see what can we fix
-// 6. make it even prettier!
+// 4. Disable buttons until we can play
+// 5. fix active btns

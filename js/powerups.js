@@ -1,12 +1,13 @@
 'use strict'
 
-
+// happens when the hint button gets clicked
 function onHint() {
     if (gIsAnimating) return
 
     if (gGame.hints > 0) gGame.isHint = true
 }
 
+// Uses hint
 function useHint(rowIdx, colIdx) {
     gGame.hints--
     document.querySelector(".hint").dataset.title = `Hints: ${gGame.hints}`
@@ -17,22 +18,19 @@ function useHint(rowIdx, colIdx) {
         const currCell = gBoard[neighborLoc.i][neighborLoc.j]
         if (currCell.isShown) continue
         // show cell for hint
-        // flipCell(neighborLoc.i, neighborLoc.j, 1000)
         currCell.isShown = true
         openCell(neighborLoc.i, neighborLoc.j)
         hideAfterHintCells.push({ i: neighborLoc.i, j: neighborLoc.j })
     }
-
-    hintTimeoutId = setTimeout(() => {
-        hideCells(hideAfterHintCells)
-        if (gGame.hints === 0) {
-            // DISABLE BUTTON (Here for smoothness of gameplay)
-            document.querySelector(".hint").disabled = true
-        }
-    }, 1000)
+    hintTimeoutId = setTimeout(() => { hideCells(hideAfterHintCells) }, 1000)
+    if (gGame.hints === 0) {
+        document.querySelector(".hint").disabled = true
+    }
     gGame.isHint = false
 }
 
+// searches for an empty cell by using "getSafeClicks()" and then picks a random one
+// and adds the safe class to show the user by CSS animation
 function onSafeClick() {
     if (gIsAnimating) return
 
@@ -55,6 +53,8 @@ function onSafeClick() {
     }
 }
 
+// returns safe clicks (non-mine cells)
+// gets called by "onSafeClick()"
 function getSafeClicks() {
     const safeClicks = []
     for (let i = 0; i < gLevel.SIZE; i++) {
@@ -65,7 +65,8 @@ function getSafeClicks() {
     }
     return safeClicks
 }
-
+// gets "EXTERMINATOR_AMOUNT" of mines and blows them up
+// updates neighbor cells as well
 function onKillMines() {
     if (gIsAnimating) return
 
@@ -99,6 +100,7 @@ function onKillMines() {
     }
 }
 
+// gets called by "onKillMines()", retrieves cells which are mines that are not marked or shwon
 function getUnmarkedMines() {
     const unmarkedMines = []
     for (let i = 0; i < gMines.length; i++) {
@@ -110,6 +112,7 @@ function getUnmarkedMines() {
     return unmarkedMines
 }
 
+// Updates Neighbors mines count after killing mines by "onKillMines()"
 function updateNeighbors(rowIdx, colIdx) {
     const neighbors = getNeighborsInclusive(rowIdx, colIdx, 1)
     for (let i = 0; i < neighbors.length; i++) {
@@ -122,6 +125,7 @@ function updateNeighbors(rowIdx, colIdx) {
     }
 }
 
+// When the mega hint button is clicked
 function onMegaHint() {
     if (gIsAnimating) return
 
@@ -130,6 +134,9 @@ function onMegaHint() {
     gGame.canUseMegaHint = false
 }
 
+// Gets run twice
+// First when we get the first location for the mega hint
+// Second when we get the second location and then shows the player the cells
 function useMegaHint(i, j) {
     if (!megaHintFirstLoc) {
         megaHintFirstLoc = { i, j }
@@ -163,7 +170,7 @@ function useMegaHint(i, j) {
     gGame.isMegaHint = false
 }
 
-
+// plants mines according to the seven boom game
 function onSevenBoom() {
     if (gIsAnimating) return
 
@@ -183,12 +190,17 @@ function onSevenBoom() {
     setMinesNegsCount(gBoard)
 }
 
+// helper function for seven boom, returns whether a specific cell is a seven boom applicable
 function isSevenBoom(num) {
     if (num % 7 === 0) return true
     if ((num + "").indexOf("7") > -1) return true
     return false
 }
 
+// gets called by pressing the sandbox button
+// gets called twice
+// first, clears the board and opens the cells
+// second, hides the cells after player has put mines
 function onSandbox() {
     if (gIsAnimating) return
 
@@ -221,7 +233,30 @@ function onSandbox() {
     }
 }
 
+// handles the sandbox each click
+function handleSandbox(i, j) {
+    if (gBoard[i][j].isMine) {
+        gLevel.MINES--
+        for (let i = 0; i < gMines.length; i++) {
+            const currMine = gMines[i]
+            if (currMine.i === i && currMine.j === j) {
+                gMines.splice(i, 1)
+                break
+            }
+        }
+    }
+    else {
+        gMines.push({ i, j })
+        gLevel.MINES++
+    }
+    gBoard[i][j].isMine = !gBoard[i][j].isMine
+    openCell(i, j)
+    const elBombsRemain = document.querySelector(".bombs-remaining")
+    elBombsRemain.innerText = formatCounters(gLevel.MINES)
+}
 
+// gets called on undo
+// many CSS animations are here you've been warned
 function onUndo() {
     if (gIsAnimating) return
     if (gGameState.board.length === 1 || gGame.isSandboxNow) return
@@ -231,24 +266,24 @@ function onUndo() {
         elSmiley.innerText = SMILEY_REGULAR
         gGame.isOn = true
         handleButtons()
-        gIsAnimating = true
+        gIsAnimating = true  // different animation
         setTimeout(() => gIsAnimating = false, 2000)
     }
-    gGameState.board.pop()
-    gGameState.lives.pop()
-    gGameState.gameProperties.pop()
-    gGame.lives = gGameState.lives[gGameState.lives.length - 1]
-    // gGame = gGameState.gameProperties[gGameState.gameProperties.length - 1]
-    gTempBoardForUndoEffects = deepCopyMatrix(gBoard)
-    gBoard = deepCopyMatrix(gGameState.board[gGameState.board.length - 1])
-    // handleButtons()
-    if (gIsAnimating) rollInBoard()
-    else renderBoardCellsAnimated()
+
+    gGameState.board.pop() // old board
+    gGameState.lives.pop() // old life count
+    gGameState.gameProperties.pop() // old game state
+    gGame.lives = gGameState.lives[gGameState.lives.length - 1] // update to new lives
+    gTempBoardForUndoEffects = deepCopyMatrix(gBoard) // temp board of before undo for effects
+    gBoard = deepCopyMatrix(gGameState.board[gGameState.board.length - 1]) // update to new lives
+
+    if (gIsAnimating) rollInBoardAfterLose() // if we lost or won, we go here to cool animations
+    else renderBoardCellsAnimated() // render board to DOM with CSS flip animations
     updateUI()
 
 }
 
-
+// toggles light class to important elements
 function onToggleTheme() {
     isDark = !isDark
     const elToggleBtn = document.querySelector(".utilities .toggle-theme")
@@ -267,14 +302,6 @@ function onToggleTheme() {
     for (let i = 0; i < btns.length; i++) {
         btns[i].classList.toggle("light")
     }
-    // var unopenedElements = document.querySelectorAll(".unopened")
-    // for (let i = 0; i < unopenedElements.length; i++) {
-    //     unopenedElements[i].classList.toggle("light")
-    // }
-    // var openedElements = document.querySelectorAll(".opened")
-    // for (let i = 0; i < openedElements.length; i++) {
-    //     openedElements[i].classList.toggle("light")
-    // }
     var cellElements = document.querySelectorAll(".cell")
     for (let i = 0; i < cellElements.length; i++) {
         cellElements[i].classList.toggle("light")
@@ -290,5 +317,49 @@ function onToggleTheme() {
     misc = document.querySelectorAll(".info-container-2 >*")
     for (let i = 0; i < misc.length; i++) {
         misc[i].classList.toggle("light")
+    }
+}
+
+// adds event listeners for hover event when using mega hint
+function addHoverEvent() {
+    if (!gGame.isMegaHint) return
+
+    const cellElements = document.querySelectorAll('.cell')
+    for (let i = 0; i < cellElements.length; i++) {
+        const cell = cellElements[i]
+        cell.addEventListener("mouseover", hoverEvent)
+    }
+}
+
+// gets the indexes and sends them to showHover which actually adds the hover class
+function hoverEvent(event) {
+    const elCell = event.srcElement
+    const tempCellIndex = elCell.classList[1].split("-")
+    const indexI = tempCellIndex[1]
+    const indexJ = tempCellIndex[2]
+    showHover({ i: indexI, j: indexJ })
+}
+
+// calculates which cells need to get the hover effect and adds them the effect
+function showHover(location) {
+    if (!gGame.isMegaHint) return
+
+    const cellElements = document.querySelectorAll('.cell')
+    cellElements.forEach(elCell => elCell.classList.remove("hover"))
+    const megaHintBiggerLoc = {
+        i: Math.max(megaHintFirstLoc.i, location.i),
+        j: Math.max(megaHintFirstLoc.j, location.j)
+    }
+    const megaHintSmallerLoc = {
+        i: Math.min(megaHintFirstLoc.i, location.i),
+        j: Math.min(megaHintFirstLoc.j, location.j)
+    }
+    for (let i = megaHintSmallerLoc.i; i <= megaHintBiggerLoc.i; i++) {
+        for (let j = megaHintSmallerLoc.j; j <= megaHintBiggerLoc.j; j++) {
+            const currCell = gBoard[i][j]
+            if (currCell.isMarked || currCell.isShown) continue
+            const elCell = getCellElement(i, j)
+            elCell.classList.add('hover')
+        }
     }
 }

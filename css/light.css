@@ -40,7 +40,7 @@
 }
 
 
-.marked {
+.marked.light {
     background: rgb(251, 223, 105);
     background: linear-gradient(180deg,
             rgba(251, 223, 105, 1) 0%,

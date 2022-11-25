@@ -1,9 +1,6 @@
 "use strict"
 
-// Elements
-// const elContainer = document.querySelector('.container')
 
-// const MINE = "💣"
 const MINE = '<img src="img/mine3.png" alt="">'
 const FLAG = "🚩"
 const LIFE = "❤️"
@@ -54,12 +51,10 @@ var megaHintFirstLoc
 
 var gGame
 
+
 function initGame() {
-    document.querySelector('.game-container').classList.add("fade")
-    setTimeout(() => {
-        document.querySelector('.game-container').classList.remove("fade")
-    }, 700)
-    // wait for mines to blow up
+    fadeGameContainer()
+
     if (gIsAnimating) return
 
     if (timerId) {
@@ -71,6 +66,14 @@ function initGame() {
     renderBoard(gBoard, ".board-container")
     clearSlate()
     gGame.isOn = true
+}
+
+
+function fadeGameContainer() {
+    document.querySelector('.game-container').classList.add("fade")
+    setTimeout(() => {
+        document.querySelector('.game-container').classList.remove("fade")
+    }, 700)
 }
 
 function clearSlate() {
@@ -132,6 +135,7 @@ function clearSlate() {
     setHighScore()
 }
 
+// disables or enables buttons according to the game
 function handleButtons() {
     if (gGame.canUseMegaHint) {
         document.querySelector(".mega-hint").disabled = false
@@ -159,23 +163,6 @@ function enableButtons() {
     document.querySelector(".kill-mines").disabled = false
 }
 
-function buildBoard() {
-    const board = []
-    for (let i = 0; i < gLevel.SIZE; i++) {
-        board[i] = []
-        for (let j = 0; j < gLevel.SIZE; j++) {
-            board[i][j] = {
-                minesAroundCount: 0,
-                isShown: false,
-                isMine: false,
-                isMarked: false,
-                isOpened: false,
-            }
-        }
-    }
-    return board
-}
-
 function checkWin() {
     for (let i = 0; i < gBoard.length; i++) {
         for (let j = 0; j < gBoard[0].length; j++) {
@@ -195,7 +182,7 @@ function setHighScore() {
     const elHighScore = document.querySelector('.info-container-2 .high-score')
     elHighScore.innerText = formatCounters(localStorage.getItem(`${gLevel.DIFFICULTY}HighScore`))
 }
-
+// checks if we need to update our high score in the storage
 function updateStorageHighScore() {
     if (typeof (Storage) === "undefined") return
     const score = gGame.secsPassed
@@ -215,6 +202,9 @@ function announceWin() {
     if (!gGame.isSevenBoom && !gGame.isBuiltBySandbox) {
         updateStorageHighScore()
     }
+    disableButtons()
+    // undo btn is disabled on win alongside every utility btn
+    document.querySelector(".undo").disabled = true
     throwConfetti()
     gGame.isOn = false
 }
@@ -224,7 +214,7 @@ function announceLose(i, j) {
     const elSmiley = document.querySelector(".smiley")
     elSmiley.innerText = SMILEY_LOSER
     const elCell = getCellElement(i, j)
-    elCell.style.backgroundColor = "red"
+    elCell.classList.add("red")
     blowUpMines(gMines) // Using an async func
     rollOutBoard()  // Using an async func
     clearInterval(timerId)
@@ -232,8 +222,8 @@ function announceLose(i, j) {
 }
 
 
-const timer = ms => new Promise(res => setTimeout(res, ms))
 // We need to wrap the loop into an async function
+// uses CSS animation to blow up mines when losing
 async function blowUpMines(gMines) {
     const gameCard = document.querySelector(".game-container")
     gameCard.classList.remove("shake")
@@ -251,6 +241,14 @@ async function blowUpMines(gMines) {
     gIsAnimating = false
 }
 
+// blows a single mine. Gets called by "blowUpMines"
+function blowUpMine(i, j) {
+    gBoard[i][j].isShown = true
+    getCellElement(i, j).classList.add("kill")
+}
+
+// similar to "blowUpMines", rolls out 40% of the cells to the bottom
+// CSS animation
 async function rollOutBoard() {
     var cellElements = document.querySelectorAll(".cell")
     // Shuffle array
@@ -263,10 +261,6 @@ async function rollOutBoard() {
         }
         await timer(25); // then the created Promise can be awaited
     }
-}
-function blowUpMine(i, j) {
-    gBoard[i][j].isShown = true
-    getCellElement(i, j).classList.add("kill")
 }
 
 function startTimer() {
@@ -335,6 +329,7 @@ function updateUI() {
     elBombsRemain.innerText = BombsRemainStr
 }
 
+// throws confetti when the player wins
 async function throwConfetti() {
     var confettiAmount = 400
     const dropConfettiTiming = {

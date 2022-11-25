@@ -41,6 +41,8 @@ function setRandomMines(i, j) {
     }
 }
 
+// removes neighbors so first click will be fully empty! (not even a number)
+// gets called by "setRandomMines()"
 function removeNeighbors(rowIdx, colIdx, emptyCells) {
     for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
         if (i < 0 || i >= gBoard.length) continue
