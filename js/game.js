@@ -119,6 +119,7 @@ function clearSlate() {
     document.querySelector(".safe-click").disabled = false
     document.querySelector(".mega-hint").disabled = false
     document.querySelector(".kill-mines").disabled = false
+    document.querySelector(".undo").disabled = false
 
     gMines = []
     megaHintFirstLoc = null

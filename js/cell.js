@@ -49,6 +49,7 @@ function onCellClickedLeft(i, j) {
     if (clickedCell.isMine) handleMine(i, j)
     else handleEmpty(i, j)
 
+    // Update for undo!
     gGameState.board.push(deepCopyMatrix(gBoard))
     gGameState.lives.push(gGame.lives)
     gGameState.gameProperties.push(deepCopyGameProperties())
@@ -71,6 +72,11 @@ function onCellClickedRight(i, j) {
 
     handleMark(i, j)
     updateUI()
+
+    // Update for undo!
+    gGameState.board.push(deepCopyMatrix(gBoard))
+    gGameState.lives.push(gGame.lives)
+    gGameState.gameProperties.push(deepCopyGameProperties())
 
     if (checkWin()) announceWin()
 }

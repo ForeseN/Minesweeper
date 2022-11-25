@@ -30,10 +30,18 @@ function renderBoardCellsAnimated() {
             if (currCell.isShown) {
                 openCell(i, j)
             } else if (oldBoardCell.isShown) { // Animate
+                // IF IN THE oldBoardCell (BEFORE UNDO) IT WAS SHOWN
+                // BUT NOT SHOWN NOW (DIDN'T GET INTO THE FIRST IF)
+                // HIDE IT BY FLIPPING
                 flipCell(i, j)
                 if (oldBoardCell.isMine) {
                     gGame.markedCount--
                 }
+            } else if (oldBoardCell.isMarked && !currCell.isMarked) {
+                const elCurrCell = getCellElement(i, j)
+                flipCell(i, j)
+                setTimeout(() => elCurrCell.classList.remove("marked"), 200)
+                gGame.markedCount--
             } else {
                 hideCell(i, j)
             }
